@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile Popup with Registration Form</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <style>
+
+    /* Custom CSS */
+
+    @import url('https://fonts.googleapis.com/css2?family=Martel+Sans:wght@600&family=Poppins:wght@300;400;700&display=swap');
+
+*{
+  font-family: 'Poppins', sans-serif;
+}
+        body {
+            background: url("{{ url_for('static', filename='images/bg.jpg') }}") no-repeat center center fixed;
+            background-size: cover;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Arial', sans-serif;
+            overflow-y: auto; /* Add vertical scrollbar if content exceeds the viewport */
+        }
+
+        .container {
+            padding: 20px;
+            overflow: auto;
+            max-height: 90vh; /* Limit height for scroll */
+        }
+
+        .card {
+            max-width: 400px;
+            width: 100%;
+            border-radius: 12px;
+            padding: 30px;
+            background-color: rgba(255, 255, 255, 0.8); /* Slightly transparent white */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .card:hover {
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+            transform: translateY(-5px);
+        }
+
+        h2 {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        /* used the below mtagline for background like services section , done by mitanshu, changed color*/
+        .mtagline {
+            font-size: 28px;
+            font-weight: bold;
+            background: linear-gradient(to right, rgba(227, 216, 223, 0.4), rgba(183, 179, 176, 0.7)); /* 60% transparency */
+            border-radius: 10px;
+        }
+
+        .search-container {
+            margin-bottom: 40px;
+        }
+
+        #search-location {
+            width: 30%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        /* Scrollbar customizations (for smooth scrolling) */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 0, 0, 0.3);
+        }
+    /* General Styles */
+
+    /* Profile Button Styles */
+    #profileButton {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      padding: 15px 30px;
+      background: linear-gradient(145deg, #6e7bff, #5560ea);
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease-in-out;
+    }
+    
+    /* Hover Effect */
+    #profileButton:hover {
+      background: linear-gradient(145deg, #5560ea, #6e7bff);  /* Reverse the gradient on hover */
+      box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);  /* Increase shadow on hover */
+      transform: scale(1.05);  /* Slightly enlarge the button on hover */
+    }
+    
+    /* Focus Effect */
+    #profileButton:focus {
+      outline: none;  /* Remove the default outline */
+      box-shadow: 0 0 8px rgba(110, 123, 255, 0.5);  /* Subtle glow effect when focused */
+    }
+    
+
+    /* Popup Styles */
+    .popup {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.6); /* Dark background */
+      z-index: 9999;
+      overflow: auto;
+    }
+
+    .popup-content {
+      position: relative;
+      background: linear-gradient(145deg, #ffffff, #f9f9f9);
+      margin: 10% auto;
+      padding: 30px;
+      width: 70%;
+      max-width: 800px;
+      border-radius: 15px;
+      box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.2);
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    /* Close Button Styles */
+    #closePopup {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      font-size: 30px;
+      font-weight: bold;
+      color: #333;
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+
+    #closePopup:hover {
+      color: #f44336;
+    }
+
+    /* Fade In Animation */
+    @keyframes fadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+
+    /* Form Elements */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 12px;
+      font-size: 14px;
+      margin: 8px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      transition: border-color 0.3s ease;
+    }
+
+    .form-control:focus {
+      border-color: #6e7bff;
+      box-shadow: 0 0 5px rgba(110, 123, 255, 0.4);
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    a.btn-secondary {
+      background-color: #6c757d;
+      color: white;
+      border-radius: 8px;
+      padding: 12px 25px;
+      display: inline-block;
+      margin-top: 20px;
+      text-align: center;
+      transition: background-color 0.3s ease;
+    }
+
+    a.btn-secondary:hover {
+      background-color: #5a6268;
+    }
+
+    /* Styling for the container */
+    .container {
+      padding: 10px 30px;
+    }
+
+    /* Optional: Adding some padding around the form */
+    form {
+      padding: 20px;
+    }
+
+    
+ /* notification button  */
+
+#notificationButton{
+  background-color: transparent;
+  border-radius: 50%;
+  border: none; 
+  transition:  0.3s ease;
+  margin-left:100px;
+  position: absolute; 
+  top: 18%;
+  right: 325px; 
+  transform: translateY(-50%);
+  padding: 0; 
+ }
+#notificationButton:hover { 
+  background-color: rgba(255, 255, 255, 0.2); }  
+ 
+  
+
+
+  /* CSS for  notification popup  box  */
+.notification-popup { 
+  display: none;
+  position: fixed;
+  top: 70px;  /* Adjusted for button position */
+  right: 20px;
+  z-index: 1000;
+}
+@media (max-width: 600px) {
+    .notification-popup {
+        width: 90%;
+        right: 5%;
+    }
+}
+
+
+.notification-popup-content {
+  position: relative;
+  background: white;
+  width: 350px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  padding: 20px;
+}
+
+.notification-close-button {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  font-size: 24px;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.notification-close-button:hover {
+  color: #ff4444;
+}
+
+.btn-warning {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  padding: 8px;
+  border-radius: 50%;
+}
+
+.notification-item {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.notification-item:last-child {
+  border-bottom: none;
+}
+
+.notification-list {
+  max-height: 250px;  /* Adjust height as needed */
+  overflow-y: auto;
+  padding-right: 10px; /* Prevents text from cutting off */
+}
+
+/* Custom scrollbar  */
+.notification-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.notification-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.notification-list::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+.notification-list::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Make the navbar fixed at the top */
+.navbar {
+    position: fixed;
+    height: 100px;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color:transparent
+    ; /* Change as needed */
+    z-index: 1000; /* Ensures it stays above other elements */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Optional shadow */
+}
+
+/* Add padding to body so content doesn't overlap */
+body {
+    padding-top: 70px; /* Adjust based on the navbar height */
+}
+
+.nav-item {
+    background-color: #f0f0f0;
+    padding: 10px;
+    text-decoration: none;
+    color: #333;
+    transition: background-color 0.3s ease;
+}
+
+.nav-item:hover {
+    background: rgb(176, 191, 223);
+    border-radius: 10px;
+}
+
+
+  </style>
+</head>
+<!-- <nav class="navbar navbar-expand-lg">
+  <div class="container">
+      <a class="navbar-brand" href="#">
+          <span class="d-lg-block d-none"
+              style="border: 4px solid; border-image: linear-gradient(to right, blue, green, yellow) 1; border-radius: 10px; padding: 10px; background: transparent;"><b>Executive
+                  Maids</b></span>
+          <img src="./static/images/logo.png" alt="Logo" width="100" height="100" class="d-lg-none d-block">
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse " id="navbarNav">
+          <ul class="navbar-nav mx-auto">
+              <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
+              <li class="nav-item"><a class="nav-link active" href="#Services">Services</a></li>
+              <li class="nav-item"><a class="nav-link active" href="about_us.html">Booking History</a></li>
+              <li class="nav-item"><a class="nav-link active" href="reviews.html">Reviews</a></li>
+              <li class="nav-item"><a class="nav-link active" href="contact.html">Contact Us</a></li>
+              <li class="nav-item"><a class="nav-link active" href="register.html">Register</a></li> -->
+
+              <!-- Language Dropdown 
+              <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button"
+                      data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      Language
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="languageDropdown">
+                      <a class="dropdown-item" href="/" data-lang="en">English</a>
+                      <a class="dropdown-item" href="indexhindi" data-lang="hi">Hindi</a>
+                      <a class="dropdown-item" href="indexgujarati" data-lang="gu">Gujarati</a>
+                      <a class="dropdown-item" href="indexBengali" data-lang="bn">Bengali</a>
+                      <a class="dropdown-item" href="indexTelugu.html" data-lang="tg">Telugu</a>
+                  </div>
+              </li>
+          </ul>
+      </div>
+  </div>
+</nav> -->
+
+
+<body>
+
+
+<section>
+<!-- Profile Button -->
+<button id="profileButton" class="btn btn-primary">View Profile 🙎🏻‍♂️</button>
+
+<div class="container mtagline">
+  <h2>Customers Dashboard</h2>
+  <a href="/logout" class="btn btn-danger">Logout</a>
+
+  <!-- <button id="notificationButton" class="btn btn-warning">  
+    <img src="static\images\notification.png" height="40px " width="40px " alt=""> <span id="notificationCount" class="badge bg-danger">0</span>
+  </button> -->
+
+
+ 
+ 
+  
+  <div class="container mt-5">
+    <h1>Welcome, {{ session['user_name'] }}</h1>
+    <h3>Available Maids</h3>
+  
+
+      <!-- Booking History Section (Moved Below the Maids Section) -->
+  <div class="container mt-5">
+    <h2>Your Booking History</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Maid Name</th>
+                <th>Booking Date</th>
+                <th>Location</th>
+                <th>Address</th>
+                <th>Phone</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for booking in bookings %}
+                <tr>
+                    <td>{{ booking[0] }}</td>  <!-- Maid Name -->
+                    <td>{{ booking[1] }}</td>  <!-- Booking Date -->
+                    <td>{{ booking[2] }}</td>  <!-- Location -->
+                    <td>{{ booking[5] }}</td>  <!-- Address -->
+                    <td>{{ booking[4] }}</td>  <!-- Customer Phone -->
+                </tr>  
+            {% endfor %}
+        </tbody>
+    </table>
+  </div>
+  
+    <!-- Search Bar for Location -->
+    <div class="search-container">
+        <input type="text" id="search-location" class="form-control" placeholder="Search by Location..." />
+    </div>
+  
+    <table class="table table-striped" id="maids-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Location</th>
+                <th>Skills</th>
+                <th>Food</th>
+                <th>Gender</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+          {% for maid in maids %}
+          <tr class="maid-row" data-location="{{ maid[4] }}">
+              <td>{{ maid[0] }}</td>  <!-- id -->
+              <td>{{ maid[1] }}</td>  <!-- Maid Name -->
+              <td>{{ maid[4] }}</td>  <!-- Location -->
+              <td>{{ maid[3] }}</td>  <!-- Skills -->
+              <td>{{ maid[2] }}</td>  <!-- Food Preference -->
+              <td>{{ maid[5] }}</td>  <!-- Gender -->
+              <td>
+                  <button type="button" class="btn btn-primary book-btn" data-maid-id="{{ maid[0] }}" data-maid-name="{{ maid[1] }}">Book</button>
+              </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+    </table>
+  </div>
+  
+</section>
+
+<!-- Booking Form Modal (Hidden initially) -->
+<div class="modal" id="bookingModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Booking Form</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+              <form id="bookingForm" action="/submit-booking" method="POST">
+                  <input type="hidden" name="maid_id" id="maid_id">
+                  <input type="hidden" name="maid_name" id="maid_name">
+
+                  <div class="form-group">
+                      <label for="customer_name">Your Name</label>
+                      <input type="text" id="customer_name" name="customer_name" class="form-control" required>
+                  </div>
+                
+                  <div class="form-group">
+                      <label for="address">Address</label>
+                      <textarea id="address" name="address" class="form-control" rows="3" required></textarea>
+                  </div>
+
+                  <div class="form-group">
+                      <label for="phone">Phone Number</label>
+                      <input type="tel" id="phone" name="phone" class="form-control" >
+                  </div>
+
+                  <button type="submit" class="btn btn-success">Submit Booking</button>
+              </form>
+          </div>
+      </div>
+  </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+  // JavaScript for dynamically filling the form based on the maid clicked
+  $(document).ready(function() {
+      $('.book-btn').click(function() {
+          maidId = $(this).data('maid-id');
+          var maidName = $(this).data('maid-name');
+
+          // Fill the hidden fields with maid data
+          $('#maid_id').val(maidId);
+          $('#maid_name').val(maidName);
+
+          // Show the booking form modal
+          $('#bookingModal').modal('show');
+      });
+
+      // Search filter for Location
+      $('#search-location').on('keyup', function() {
+          var value = $(this).val().toLowerCase();
+          $('#maids-table tbody tr').filter(function() {
+              $(this).toggle($(this).find('.location').text().toLowerCase().indexOf(value) > -1);
+          });
+      });
+  });
+</script>
+<!-- Profile Popup -->
+<div id="profilePopup" class="popup">
+  <div class="popup-content">
+    <button id="closePopup">&times;</button>
+    <div class="container">
+      <h3 class="text-center" style="color: #0eb427; font-weight: bold;">Customer Profile</h3>
+
+      <!-- Registration Form inside the Popup -->
+      <form method="POST" action="{{ url_for('register_customer') }}">
+        <img src="static\images\maid.png" alt="img">
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" name="name" value="{{ session['user_name'] }}" readonly>
+        </div>
+
+         
+
+        <div class="form-group">
+            <label for="phone_no">Phone Number</label>
+            <input type="text" class="form-control" id="phone_no" name="phone_no" pattern="\d{10}" title="Phone number should be 10 digits" value="{{ session['phone_no'] }}" readonly>
+        </div>
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" class="form-control" id="email" name="email" value="{{ session['email'] }}" readonly>
+        </div>
+      
+        <div class="form-group">
+            <label for="location">Location</label>
+            <input type="text" class="form-control" id="location" name="location" value="{{ session['location'] }}" readonly>
+        </div>
+        </div>
+       
+      </form>
+
+    </div>
+  </div>
+</div>
+
+<!-- JavaScript to Open and Close the Popup -->
+<script>
+  // Get the modal and the profile button
+  var modal = document.getElementById("profilePopup");
+  var openButton = document.getElementById("profileButton"); // Assuming you have a profile button
+  var closeButton = document.getElementById("closePopup");
+
+  // When the user clicks on the profile button, open the modal
+  openButton.onclick = function() {
+    modal.style.display = "block";
+  }
+
+  // When the user clicks on the close button, close the modal
+  closeButton.onclick = function() {
+    modal.style.display = "none";
+  }
+
+  // Optional: Close the modal when clicking outside of it
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }
+</script>
+
+<!-- Notification Button -->
+<!-- <button id="notificationButton" class="btn btn-warning"> 
+  <img src="static/images/notification.png" height="50" width="50" alt="Notifications">
+</button> -->
+
+<button id="notificationButton" class="btn btn-warning">
+  <i class="fa-solid fa-bell fa-shake fa-2xl" style="color: #1d25bf;"></i>
+</button>
+
+<!-- Notification Popup -->
+
+<div id="notificationPopup" class="notification-popup">
+  <div class="notification-popup-content">
+    <span id="closePopup2" class="notification-close-button">&times;</span>
+    <div id="notificationContent">
+      <h3 style="color: #0eb427; margin-top: 0;">Notifications</h3>
+      <h4>Hello, {{ session['user_name'] }}</h4>
+      <div class="notification-list">
+        <!-- Notification items will go here -->
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // DOM elements
+  const modal = document.getElementById('notificationPopup');
+  const openBtn = document.getElementById('notificationButton');
+  const closeBtn = document.getElementById('closePopup2');
+  const notificationList = document.querySelector('.notification-list');
+
+  // Initialize WebSocket connection to Flask-SocketIO
+  const socket = io("http://localhost:5000");  // Adjust the URL if running on a different host
+
+  // Function to add new notifications dynamically
+  function addNotification(message) {
+    const notificationItem = document.createElement('div');
+    notificationItem.classList.add('notification-item');
+    const timestamp = new Date().toLocaleTimeString(); // Current time
+    notificationItem.innerHTML = `<p><strong>${message}</strong> <br> <small style="color: gray;">${timestamp}</small></p>`;
+    notificationList.prepend(notificationItem); // Add new notifications at the top
+  }
+
+  function fetchNotifications() {
+    fetch('/get_notifications')  // Replace with your API endpoint
+        .then(response => response.json())
+        .then(data => {
+            const notificationList = document.querySelector('.notification-list');
+            notificationList.innerHTML = ""; // Clear old notifications
+            data.notifications.forEach(notification => {
+                const notificationItem = document.createElement('div');
+                notificationItem.classList.add('notification-item');
+                notificationItem.innerHTML = `<p><strong>${notification.message}</strong> <br> <small>${notification.time}</small></p>`;
+                notificationList.appendChild(notificationItem);
+            });
+        })
+        .catch(error => console.error("Error fetching notifications:", error));
+}
+
+// Fetch notifications every 5 seconds
+setInterval(fetchNotifications, 5000);
+
+
+  // Listen for real-time notifications from Flask server
+  socket.on("notification", function (data) {
+    addNotification(data.message);
+  });
+
+  // Show modal when notification button is clicked
+  openBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    modal.style.display = 'block';
+  });
+  // Hide modal when close button is clicked
+  closeBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    modal.style.display = 'close';
+  })
+
+  
+
+  // Close modal when clicking outside of it
+  document.addEventListener('click', (e) => {
+    if (modal.style.display === 'block' && !modal.contains(e.target) && e.target !== openBtn) {
+      modal.style.display = 'none';
+    }
+  });
+
+  // Close modal with ESC key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.style.display === 'block') {
+      modal.style.display = 'none';
+    }
+  });
+});
+
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+
+
+
+
+
+</body>
+</html>

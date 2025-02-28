@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>मेड सर्विसेज़ </title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Bootstrap Bundle JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Bootstrap JS (including Popper.js) -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+    <link href="static/css/styles.css" rel="stylesheet"   />
+    <link href="static/css/chatbot.css" rel="stylesheet"   />
+    <style>
+        /* Background Image from static folder */
+       body {
+            background-image: url("{{ url_for('static', filename='images/bg.jpg') }}");
+            background-size: cover;
+            background-position: center;
+            color: #0c31d6;
+            font-family: 'Poppins', sans-serif;
+            height: 100vh;
+            margin: 0;
+        }
+
+        header {
+            background: transparent;
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 3.5em;
+            letter-spacing: 2px;
+            font-weight: 600;
+        }
+
+        header nav a {
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        header nav a:hover {
+            transform: scale(1.1);
+            background-color: #007bff;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border-radius: 30px;
+            transition: all 0.3s;
+            margin: 15px;
+        }
+
+        .btn:hover {
+            background-color: #007bff;
+            transform: translateY(-5px);
+        }
+
+        section {
+            background: transparent;
+            padding: 50px 20px;
+            border-radius: 10px;
+            margin-top: -100px;
+            text-align: center;
+        }
+
+        section h2 {
+            font-size: 2.8em;
+            margin-bottom: 20px;
+        }
+
+        .service-list {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+
+        .service-card {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 30px;
+            border-radius: 12px;
+            width: 22%;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .service-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .service-card h3 {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .service-card p {
+            font-size: 1.1em;
+            color: #555;
+        }
+
+        .contact-form {
+            background: rgba(255, 255, 255, 0.85);
+            padding: 40px;
+            border-radius: 10px;
+            margin-top: 60px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            margin-bottom: 15px;
+            width: 100%;
+            padding: 14px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 1em;
+            transition: border 0.3s;
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        .contact-form button {
+            width: 100%;
+            padding: 14px;
+            background-color: #007bff;
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .contact-form button:hover {
+            background-color: #0056b3;
+        }
+
+
+        /* Footer Styles */
+        footer {
+            background-color: #0c0b0b;
+
+            color: #e8c7c7;
+            padding: 20px 0;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+
+        footer .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        footer h3 {
+            font-size: 1.4em;
+            margin-bottom: 10px;
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        footer .contact ul,
+        footer .links ul,
+        footer .social-media ul {
+            list-style: none;
+            padding: 0;
+            font-size: 1em;
+        }
+
+        footer .contact li,
+        footer .links li,
+        footer .social-media li {
+            margin-bottom: 8px;
+        }
+
+        footer .contact a,
+        footer .links a,
+        footer .social-media a {
+            text-decoration: none;
+            color: #007bff;
+            transition: color 0.3s;
+        }
+
+        footer .contact a:hover,
+        footer .links a:hover,
+        footer .social-media a:hover {
+            color: #fff;
+        }
+
+        footer .contact i,
+        footer .links i,
+        footer .social-media i {
+            margin-right: 10px;
+        }
+
+        footer .text-center {
+            margin-top: 20px;
+            font-size: 0.9em;
+        }
+
+        /* Responsive Design for Footer */
+        @media (max-width: 768px) {
+            footer .footer-content {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            footer .footer-content>div {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+
+            footer .contact ul,
+            footer .links ul,
+            footer .social-media ul {
+                text-align: center;
+            }
+
+            footer .contact li,
+            footer .links li,
+            footer .social-media li {
+                margin-bottom: 12px;
+            }
+        }
+
+
+        .nav-item {
+            background-color: #f0f0f0;
+            padding: 10px;
+            text-decoration: none;
+            color: #333;
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-item:hover {
+            background: rgb(176, 191, 223);
+            border-radius: 10px;
+        }
+
+        /* CSS for the login button */
+        .login-btn {
+            font-family: 'Arial', sans-serif;
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #007bff;
+            /* Blue background */
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .login-btn:hover {
+            background-color: #0056b3;
+            /* Darker blue on hover */
+        }
+
+        /* CSS for the trusted maid service text */
+        .trusted-maid-service {
+            font-size: 70px;
+            font-weight: bold;
+            padding: 10px;
+            text-align: center;
+        }
+
+
+        /* CSS for the tagline */
+        .tagline {
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .mtagline {
+            font-size: 28px;
+            font-weight: bold;
+            background: linear-gradient(to right, rgb(255, 95, 207), #feb47b);
+            border-radius: 20px
+        }
+
+
+
+
+        /* CSS for the Featured Services section */
+
+        .row {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            margin: 10px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .card img {
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            width: 100%;
+        }
+
+        .card-body {
+            padding: 30px;
+            text-align: center;
+        }
+
+        .card-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .card-text {
+            font-size: 16px;
+            color: #555;
+            text-align: left;
+        }
+
+        .btn-outline-dark {
+            font-size: 16px;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            text-decoration: none;
+            color: #000;
+            border: 2px solid #000;
+            background-color: #fff;
+        }
+
+        .btn-outline-dark:hover {
+            background-color: #000;
+            color: #fff;
+        }
+
+
+        /* CSS for the Why Choose Us section */
+        #why-choose-us {
+            padding: 100px 0;
+            background-color: #f8f9fa;
+        }
+
+        .heading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .heading h1 {
+            font-size: 36px;
+            font-weight: bold;
+            margin-right: 20px;
+        }
+
+        .logo {
+            max-width: 100px;
+            height: auto;
+        }
+
+        .reasons {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        .reason {
+            margin: 10px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+
+        .reason img {
+            max-width: 100px;
+            height: auto;
+            margin-bottom: 15px;
+        }
+
+        .reason h3 {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .reason p {
+            font-size: 16px;
+            color: #555;
+        }
+
+
+
+        /* CSS Highlights */
+
+        .carousel-container {
+            width: 100%;
+            overflow: hidden;
+            background: transparent;
+            padding: 20px;
+            box-shadow: 0 8px 16px rgba(46, 44, 44, 0.4);
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .carousel-heading {
+            font-size: 30px;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        .carousel {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            animation: scroll 40s linear infinite;
+        }
+
+        .carousel img {
+            width: 200px;
+            height: 200px;
+            margin: 10px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .carousel img:hover {
+            transform: scale(1.1);
+        }
+
+        @keyframes scroll {
+            0% {
+                transform: translateX(100%);
+            }
+
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        .map-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .map-container iframe {
+            border: 0;
+            width: 80%;
+            height: 300px;
+            max-width: 1000px;
+            /* Optional: Limit the maximum width for larger screens */
+        }
+
+
+        /* Gradient Overlay */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            /* Dark transparent overlay */
+            z-index: -1;
+        }
+        
+#scrollToTopBtn {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    bottom: 20px; /* 20px from the bottom */
+    right: 30px; /* 30px from the right */
+    z-index: 100; /* Sit on top */
+    border:none; /* No border */
+    border-radius: 100px; /* Rounded corners */
+    padding: 10px 9px; /* Some padding */
+    cursor: pointer; /* Pointer cursor on hover */
+}
+
+#scrollToTopBtn:hover{
+    background-color: #000000;
+    color: rgb(255, 255, 255);
+}
+
+/* pop up login form  */
+
+/* Ensure the login form is hidden by default */
+.login-form-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10000;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: none; /* Hide the login form initially */
+  align-items: center;
+  justify-content: center;
+}
+
+/* When the 'active' class is added, show the login form */
+.login-form-container.active {
+  display: flex; /* Show the form when active */
+}
+
+.login-form-container .card {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 15px;
+  width: 50rem;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.login-form-container form {
+  width: 100%;
+}
+
+.login-form-container form h3 {
+  font-size: 3rem;
+  color: rgb(129, 128, 128);
+  text-transform: uppercase;
+  text-align: center;
+  padding: 1rem 0;
+}
+
+.login-form-container form .box {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.7rem;
+  color: #333;
+  margin: 0.6rem 0;
+  border: 0.3rem solid rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+}
+
+.login-form-container form .box:focus {
+  border-color: #007bff; /* Fixing undefined variable */
+}
+
+.login-form-container form label {
+  font-size: 1.5rem;
+}
+
+.login-form-container form .btn {
+  display: block;
+  width: 100%;
+}
+
+.login-form-container form p {
+  padding: 0.5rem 0;
+  font-size: 1.5rem;
+  color: #666;
+}
+
+.login-form-container form p a {
+  color: #007bff;
+}
+
+.login-form-container form p a:hover {
+  color: #333;
+  text-decoration: underline;
+}
+
+/* Close Button - Fixed Position */
+.login-form-container #form-close {
+  position: absolute;
+  top: 1rem;
+  right: 1.5rem;
+  font-size: 2rem;
+  color: #333;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg mt-3">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <span class="d-lg-block d-none"
+                    style="border: 4px solid; border-image: linear-gradient(to right, blue, green, yellow) 1; border-radius: 10px; padding: 10px; background: transparent;"><b>Executive
+                        Maids</b></span>
+
+                <img src="./static/images/logo.png" alt="" width="100" height="100" class="d-lg-none d-block">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse " id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="index.html">होम </a>
+                    </li>
+
+
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#Services">सर्विसेज़</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="about_us.html">परिचय</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="reviews.html">रिव्यूज</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="contact.html">संपर्क करे</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="register.html">रजिस्टर</a>
+                    </li>
+                    <!-- Translation Bar -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            भाषा
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="languageDropdown">
+                            <a class="dropdown-item" href="/" data-lang="en">English</a>
+                            <a class="dropdown-item" href="indexhindi" data-lang="hi">Hindi</a>
+                            <a class="dropdown-item" href="indexgujarati" data-lang="gu">Gujarati</a>
+                            <a class="dropdown-item" href="Bengali" data-lang="bn">Bengali</a>
+                            
+                    </li>
+                </ul>
+                <a class="btn btn-primary login-btn" id="login-btn2">लॉगिन</a>
+
+            </div>
+        </div>
+    </nav>
+
+
+    <div class="login-form-container {% if show_login %}active{% endif %}">
+        <div class="card p-4 shadow-lg position-relative">
+            
+            <!-- बंद करने का बटन -->
+            <div>
+                <button id="form-close" class="btn btn-danger position-absolute top-0 end-0 m-2">&times;</button>
+            </div>
+    
+            <!-- लॉगिन फॉर्म -->
+            <form method="POST" action="{{ url_for('login') }}">
+                <h2 class="text-center mb-4">लॉगिन करें</h2>  <!-- Login → लॉगिन करें -->
+                
+                <!-- फ्लैश संदेश -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="alert alert-{{ messages[0][0] }} mt-4">
+                        {{ messages[0][1] }}
+                    </div>
+                {% endif %}
+                {% endwith %}
+    
+                <div class="form-group">
+                    <label for="user_type">उपयोगकर्ता प्रकार</label>  <!-- User Type → उपयोगकर्ता प्रकार -->
+                    <select class="form-control" id="user_type" name="user_type">
+                        <option value="customer">ग्राहक</option>  <!-- Customer → ग्राहक -->
+                        <option value="maid">नौकरानी</option>  <!-- Maid → नौकरानी -->
+                    </select>
+                </div>
+    
+                <div class="form-group">
+                    <label for="email">ईमेल</label>  <!-- Email → ईमेल -->
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+    
+                <div class="form-group">
+                    <label for="password">पासवर्ड</label>  <!-- Password → पासवर्ड -->
+                    <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+    
+                <button type="submit" class="btn btn-primary w-100">लॉगिन करें</button>  <!-- Login → लॉगिन करें -->
+            </form>
+    
+            <p class="mt-3">क्या आपके पास खाता नहीं है? <br>  <!-- Don't have an account? → क्या आपके पास खाता नहीं है? -->
+                <a href="/customer">ग्राहक के रूप में रजिस्टर करें</a> |  <!-- Register as Customer → ग्राहक के रूप में रजिस्टर करें -->
+                <a href="/maid.html">नौकरानी के रूप में रजिस्टर करें</a>  <!-- Register as Maid → नौकरानी के रूप में रजिस्टर करें -->
+            </p>
+        </div>
+    </div>
+    
+    
+
+
+    <div id="wrapper-class" class="">
+
+        <!-- Home -->
+        <section id="Home" class="mar-top">
+            <div class="container">
+                <div class="row d-flex justify-content-between align-center">
+                    <div class="col-lg-6">
+                        <p class="mt-5 trusted-maid-service">भारत की सबसे भरोसेमंद मेड सेवा </p>
+                        <p class="mt-5 tagline">"एग्जीक्यूटिव मेड्स-भरोसेमंद घरेलू सहायकों के साथ अपने जीवन को आसान और सुव्यवस्थित बनाएं!"</p>
+                        <button class="btn btn-outline-dark mt-lg-5 read-more-btn">Read More</button>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!--Services -->
+        <section id="Services">
+            <div class="container mar-top">
+                <h1 class="mb-5">हमारी विशिष्ट सेवाएँ</h1>
+                <h3 class="mt-5 mtagline"> अपनी जरूरतों के लिए खास तौर पर<br> प्रशिक्षित और अनुभवी प्रोफेशनल्स की करें भर्ती!</3>
+                    <div class="row d-flex justify-content-between">
+
+                        <div class="card" style="width: 18rem;">
+                            <img src="./static/images/m1.jpeg" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title">घर की सफाई <br> बेहतरीन और आसान!</h5>
+                                <p class="card-text">हमारी पेशेवर टीम आपको बेहतरीन हाउस क्लीनिंग सेवाएँ प्रदान करती है, जिसमें डस्टिंग, वैक्यूमिंग, पोछा लगाना और बहुत कुछ शामिल है। 
+                                    अब बिना किसी मेहनत के अपने घर को चमकता हुआ देखें!
+                                    आज ही संपर्क करें!
+                                </p>
+                            </div>
+                        </div>
+
+
+                        <div class="card" style="width: 18rem;">
+                            <img src="./static/images/m2.jpeg" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title">बच्चे की देखभाल</h5>
+                                <p class="card-text">एग्जीक्यूटिव मेड्स के साथ पाएँ भरोसेमंद और स्नेहमय चाइल्ड केयर सेवाएँ!
+
+                                    हमारी पेशेवर टीम आपके बच्चे की सुरक्षा और देखभाल सुनिश्चित करती है, ताकि आप बेफिक्र रहें। 
+                                    भरोसेमंद और गुणवत्तापूर्ण चाइल्ड केयर के लिए!
+                                    आज ही संपर्क करें!
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="card" style="width: 18rem;">
+                            <img src="./static/images/m3.jpeg" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title">पेशेवर कुक</h5>
+                                <p class="card-text">स्वादिष्ट और घर जैसा खाना, बिना किसी झंझट के!
+
+                                    हमारे कुशल कुक आपके स्वाद और पसंद के अनुसार पौष्टिक और स्वादिष्ट व्यंजन तैयार करते हैं। घर पर ही लीजिए बेहतरीन खाना!
+                                    
+                                    विश्वसनीय कुक सेवाओं के लिए आज ही एग्जीक्यूटिव मेड्स से संपर्क करें!
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="card" style="width: 18rem;">
+                            <img src="./static/images/m4.jpeg" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title">वरिष्ठ देखभाल</h5>
+                                <p class="card-text">अपने प्रियजनों को मिले वैसी देखभाल, जैसे वे डिजर्व करते हैं!
+                                    हमारी पेशेवर टीम सहानुभूति और विश्वसनीयता के साथ वरिष्ठ देखभाल सेवाएं प्रदान करती है, 
+                                    जो उनकी हर जरूरत को ध्यान में रखते हुए कस्टमाइज की जाती हैं।
+                                   विश्वसनीय वरिष्ठ देखभाल के लिए आज ही एग्जीक्यूटिव मेड्स से संपर्क करें!"
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+
+            </div>
+
+        </section>
+
+
+        <!--Why choose us-->
+        <section id="why-choose-us">
+            <div class="container">
+                <div class="heading">
+                    <h1 class="mb-5">हमें क्यों चुनें?</h1>
+                    <img src="./static/images/why_choose_us.jpeg" alt="Company Logo" class="logo">
+                </div>
+                <div class="reasons">
+                    <div class="reason">
+                        <img src="./static/images/verify.png" alt="Verification & Assessment">
+                        <h3>पुष्टि और मूल्यांकन</h3>
+                        <p>हम ए.आई. का उपयोग करके अपनी कड़ी शारीरिक और टेलीफोनिक सत्यापन प्रक्रियाओं को और अधिक सुदृढ़ बनाते हैं, ताकि हमारे कर्मचारियों का सर्वोत्तम गुणवत्ता मूल्यांकन सुनिश्चित किया जा सके।</p>
+                    </div>
+                    <div class="reason">
+                        <img src="./static/images/transpart_pricing.png" alt="Transparent Pricing">
+                        <h3>पारदर्शी मूल्य</h3>
+                        <p>आप जो भुगतान करते हैं, आप वही पाते हैं। इसके अलावा, आपको मिलेगा रिप्लेसमेंट गारंटी, कोविड-19 टेस्ट रिपोर्ट्स, सत्यापन दस्तावेज़ और भी बहुत कुछ!</p>
+                    </div>
+                    <div class="reason">
+                        <img src="./static/images/Customer_support.png" alt="Customer Support">
+                        <h3>ग्राहक सहायता</h3>
+                        <p>हमारे ग्राहक सेवा अधिकारी आपकी बात सुनने और आपकी समस्याओं का समाधान करने के लिए हमेशा मौजूद रहेंगे।</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+        <!-- Highlights -->
+        <section>
+            <div class="carousel-container">
+                <h2 class="carousel-heading">Highlights @Executive Maids</h2>
+                <div class="carousel">
+                    <img src="{{ url_for('static', filename='images/H_1.jpeg') }}" alt="Image 1">
+                    <img src="{{ url_for('static', filename='images/H_2.jpeg') }}" alt="Image 2">
+                    <img src="{{ url_for('static', filename='images/H_3.jpeg') }}" alt="Image 3">
+                    <img src="{{ url_for('static', filename='images/H_4.jpeg') }}" alt="Image 4">
+                    <img src="{{ url_for('static', filename='images/H_5.jpeg') }}" alt="Image 5">
+                    <img src="{{ url_for('static', filename='images/H_6.jpeg') }}" alt="Image 6">
+                    <img src="{{ url_for('static', filename='images/H_7.jpeg') }}" alt="Image 7">
+                    <img src="{{ url_for('static', filename='images/H_8.jpeg') }}" alt="Image 8">
+                </div>
+            </div>
+            
+        </section> 
+
+        <!-- Map Embed Section -->
+        <div class="map-container mt-4">
+            <h2> You can also reach us nearby your location</h2>
+            <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d315077.123456789!2d73.123456!3d22.123456!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1234567890abcdef%3A0x1234567890abcdef!2sParul%20University%2C%20Vadodara%2C%20Gujarat%2C%20India!5e0!3m2!1sen!2sbd!4v1603794290143!5m2!1sen!2sbd"
+                width="80%" height="300" style="border: 0;" allowfullscreen="" aria-hidden="false"
+                tabindex="0"></iframe>
+        </div>
+        
+
+
+
+        <!-- Footer Section -->
+        <br><br> <br> <br> <br> <br>
+        <footer> <span>
+                <div class="footer-content">
+                    <div class="contact">
+                        <h3>Contact Us</h3>
+                        <ul>
+                            <li><i class="bi bi-envelope"></i> ईमेल : contact@maidservice.com</li>
+                            <li><i class="bi bi-phone"></i> फोन : +123 456 7890</li>
+                            <li><i class="bi bi-geo-alt"></i> पता : भागलपुर, बिहार</li>
+                        </ul>
+                    </div>
+                    <div class="links">
+                        <h3>Quick Links</h3>
+                        <ul>
+                            <li><a href="about_us.html">हमारी सेवाएँ</a></li>
+                            <li><a href="contact.html">हमसे संपर्क करे </a></li>
+                            <li><a href="privacyPolicy.html">गोपनीयता नीति</a></li>
+                            <li><a href="TermsOfServices.html">सेवाओ की शर्तें</a></li>
+                            <li><a href="tearmsAndConditionCustomer.html">ग्राहक के लिए शर्तें और नियम</a></li>
+                            <li><a href="tearmsAndConditionMaid.html">मेड के लिए शर्तें और नियम</a></li>
+                            <li><a href="services.html">हमारे बारे में</a></li>
+                        </ul>
+                    </div>
+                    <div class="social-media">
+                        <h3>हमसे जुड़ें</h3>
+                        <ul>
+                            <li><a href="https://facebook.com" target="_blank"><i class="bi bi-facebook"></i>
+                                फेसबुक</a></li>
+                            <li><a href="https://twitter.com" target="_blank"><i class="bi bi-twitter"></i>ट्विटर</a>
+                            </li>
+                            <li><a href="https://instagram.com" target="_blank"><i class="bi bi-instagram"></i>
+                                इंस्टाग्राम</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+
+            </span>
+        </footer>
+        <button id="scrollToTopBtn" style="display: none; position:right;  bottom: 100px; right: 30px; z-index: 100;  border: none; border-radius: 100px; padding: 10px 10px; cursor: pointer;">
+            <img src="static\images\up-arrow.png" alt="Top" style="width: 25px; height: 25px; vertical-align: middle;">
+        </button>
+
+        <!-- Chatbot Toggle Button -->
+        <button id="chatbot-button">💬</button>
+
+        <!-- Chatbot Window -->
+        <div id="chatbot-window" class="chatbot-window"
+            style="display: none; position: fixed; bottom: 80px; right: 20px; width: 300px; background-color: white; border-radius: 8px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); padding: 10px;">
+            <div id="chatbot-header"
+                style="font-size: 18px; font-weight: bold; padding: 10px; background-color: #007bff; color: white; border-radius: 8px 8px 0 0;">
+                Maid Service Chatbot
+            </div>
+            <div id="chatbot-messages"
+                style="overflow-y: auto; max-height: 200px; margin: 10px 0; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                <!-- Messages will be displayed here -->
+            </div>
+            <input id="chatbot-input" type="text" placeholder="Ask me anything..."
+                style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd;">
+            <button id="send-message" class="btn btn-primary"
+                style="width: 100%; border-radius: 8px; margin-top: 5px;">Send</button>
+        </div>
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+    <script>// JavaScript to toggle the content display
+        document.querySelector('.read-more-btn').addEventListener('click', function () {
+            var content = document.querySelector('.content');
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+                this.textContent = 'Read Less'; // Change button text to "Read Less"
+            } else {
+                content.style.display = 'none';
+                this.textContent = 'Read More'; // Change button text back to "Read More"
+            }
+        });
+        window.onscroll = function() {
+        if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+            scrollToTopBtn.style.display = "block"; // Show button
+        } else {
+            scrollToTopBtn.style.display = "none"; // Hide button
+        }
+    };
+
+    // Scroll to top when button is clicked
+    scrollToTopBtn.addEventListener("click", function() {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth" // Smooth scroll
+        });
+    })
+
+    // reveiws
+    
+var swiper = new Swiper(".review-slider", {
+    spaceBetween: 20,
+    loop:true,
+    autoplay: {
+        delay: 2500,
+        disableOnInteraction: false,
+    },
+    breakpoints: {
+        640: {
+          slidesPerView: 1,
+        },
+        768: {
+          slidesPerView: 2,
+        },
+        1024: {
+          slidesPerView: 3,
+        },
+    },
+});
+</script>
+<script>
+    //done by tanay 
+// pop up login form 
+// Select elements
+let formBtn = document.querySelector("#login-btn2"); // Button to open form
+let loginForm = document.querySelector(".login-form-container"); // Login form container
+let formClose = document.querySelector("#form-close"); // Close button
+
+// Ensure the login form is hidden on page load
+window.onload = () => {
+    loginForm.classList.remove("active");
+};
+
+// Function to show login form
+formBtn.addEventListener("click", () => {
+    loginForm.classList.add("active"); // Add 'active' class to show form
+});
+
+// Function to close login form
+formClose.addEventListener("click", () => {
+    loginForm.classList.remove("active"); // Remove 'active' class to hide form
+});
+
+// Close the form when clicking outside of it
+window.addEventListener("click", (event) => {
+    if (event.target === loginForm) {
+        loginForm.classList.remove("active");
+    }
+});
+
+// Ensure the login form is hidden on page load unless there was a login error
+window.onload = () => {
+        let showLogin = "{{ show_login | lower }}" === "true"; // Get value from Jinja
+        
+        if (showLogin) {
+            loginForm.classList.add("active"); // Show form if login failed
+        } else {
+            loginForm.classList.remove("active"); // Ensure it starts hidden
+        }
+    };
+
+    // Function to show login form
+    formBtn.addEventListener("click", () => {
+        loginForm.classList.add("active"); // Show form
+    });
+
+    // Function to close login form
+    formClose.addEventListener("click", () => {
+        loginForm.classList.remove("active"); // Hide form
+    });
+
+    // Close the form when clicking outside of it
+    window.addEventListener("click", (event) => {
+        if (event.target === loginForm) {
+            loginForm.classList.remove("active");
+        }
+    });
+    </script>
+    <script src="static/js/script.js"></script>
+    <script src="static/js/chatbot.js"></script>
+<script>
+         $(document).ready(function () {
+          // Initialize Bootstrap dropdown
+          $('#languageDropdown').dropdown();
+        });
+</script>
+</body>
+<!--localisation Done by Tanay  -->
+
+</html>

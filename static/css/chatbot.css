@@ -1,0 +1,88 @@
+/* Chatbot Toggle Button */
+#chatbot-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #007bff;
+    color: white;
+    padding: 15px;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Chatbot Window (Reduced Size) */
+#chatbot-window {
+    display: none; /* Initially hidden */
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    width: 250px;  /* Reduced width */
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+}
+
+/* Chatbot Header */
+#chatbot-header {
+    font-size: 16px;  /* Reduced font size */
+    font-weight: bold;
+    padding: 8px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 8px 8px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Close Button */
+#close-chatbot {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* Messages Box */
+#chatbot-messages {
+    overflow-y: auto;
+    max-height: 150px;  /* Reduced height */
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #f9f9f9;
+    height: 150px;
+}
+
+/* Input Field */
+#chatbot-input {
+    width: 100%;
+    padding: 8px;  /* Reduced padding */
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    margin-bottom: 5px;
+}
+
+/* Send Button Below Input */
+#send-message {
+    width: 100%;
+    padding: 8px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    border: none;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 6px;
+    transition: background 0.3s ease;
+}
+
+#send-message:hover {
+    background-color: #0056b3;
+}

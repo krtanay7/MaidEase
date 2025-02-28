@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="static/css/styles.css" rel="stylesheet" />
+    <link href="static/css/chatbot.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+
+    <title>About Us - Executive Maids</title>
+    <style>
+        /* Background Image from static folder */
+        body {
+            background-image: url("{{ url_for('static', filename='images/bg.jpg') }}");
+            background-size: cover;
+            background-position: center;
+            color: #0c31d6;
+            font-family: 'Poppins', sans-serif;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .about-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            border-radius: 12px;
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .about-container:hover {
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+            transform: translateY(-5px);
+        }
+
+        h2 {
+            font-size: 28px;
+            color: #007bff;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .services-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .services-list li {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .services-list li:hover {
+            background-color: #45a049;
+        }
+
+        .back-button {
+            display: block;
+            width: 100px;
+            margin: 20px auto;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .back-button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        /* Developer Section */
+        .developer-section {
+            margin-top: 50px;
+        }
+
+        .developer-section h3 {
+            text-align: center;
+            color: #007bff;
+            margin-bottom: 30px;
+        }
+
+        .developer-card {
+            text-align: center;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+        }
+
+        .developer-card:hover {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .developer-card img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid #007bff;
+        }
+
+        .developer-card h4 {
+            margin-top: 20px;
+            font-size: 1.5rem;
+            color: #007bff;
+        }
+
+        .developer-card p {
+            font-size: 1rem;
+            color: #555;
+            margin-top: 10px;
+        }
+
+        .developer-card .social-icons a {
+            margin: 10px;
+            font-size: 1.5rem;
+            color: #007bff;
+        }
+
+        .developer-card .social-icons a:hover {
+            color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="about-container">
+        <h2>About Us - Executive Maids 
+            <i class="fa-solid fa-address-card fa-beat" style="color: #74C0FC;"></i>        </h2>
+        <p>Welcome to Executive Maids, your trusted partner for all your household needs. We specialize in providing top-notch services to make your life easier and more comfortable. Our team of professionals is dedicated to delivering the highest quality of service with trust, safety, and professionalism.</p>
+        <p>Our services include: </p>
+        <ul class="services-list">
+            <li>House Cleaning</li>
+            <li>Cooking Food</li>
+            <li>Child Caring</li>
+            <li>Elder Caring</li>
+            <li>Other House Related Works</li>
+        </ul>
+        <p>At Executive Maids, we understand the importance of a clean and well-maintained home. Our experienced staff is here to ensure that your home is spotless, your meals are delicious, and your loved ones are well taken care of. Contact us today to experience the best in home care services.</p>
+        <a href="javascript:history.back()" class="back-button">Back</a>
+    </div>
+
+    <!-- Developer Section -->
+    <div class="developer-section">
+        <h3>Meet Our Developers</h3>
+        <div class="container">
+            <div class="row">
+                <!-- Developer 1 -->
+                <div class="col-md-3 col-sm-6">
+                    <div class="developer-card">
+                        <img src="data:image/jpeg;base64,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" alt="Developer 1">
+                        <h4>RITESH KUMAR </h4>
+                        <p>Lead Developer</p>
+                        <p>Ritesh is responsible for the backend architecture and database management.</p>
+                        <div class="social-icons">
+                            <a href="https://www.linkedin.com/in/" target="_blank">🔗</a>
+                            <a href="https://github.com/" target="_blank">🐙</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Developer 2 -->
+                <div class="col-md-3 col-sm-6">
+                    <div class="developer-card">
+                        <img src="static/images/developer2.jpg" alt="Developer 2">
+                        <h4>Adesh </h4>
+                        <p>Full Stack Developer</p>
+                        <p> Bridges both the frontend and backend, ensuring smooth integration.</p>
+                        <div class="social-icons">
+                            <a href="https://www.linkedin.com/in/" target="_blank">🔗</a>
+                            <a href="https://github.com/" target="_blank">🐙</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Developer 3 -->
+                <div class="col-md-3 col-sm-6">
+                    <div class="developer-card">
+                        <img src="static/images/developer3.jpg" alt="Developer 3">
+                        <h4>Jane Smith</h4>
+                        <p>Frontend Developer</p>
+                        <p>Jane is the creative mind behind the UI/UX design and frontend development.</p>
+                        <div class="social-icons">
+                            <a href="https://www.linkedin.com/in/" target="_blank">🔗</a>
+                            <a href="https://github.com/" target="_blank">🐙</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Developer 4 -->
+                <div class="col-md-3 col-sm-6">
+                    <div class="developer-card">
+                        <img src="static/images/developer4.jpg" alt="Developer 4">
+                        <h4>Emily Davis</h4>
+                        <p>QA Engineer</p>
+                        <p>Emily ensures that all the code is bug-free and the site is user-friendly.Integrated chatBot</p>
+                        <div class="social-icons">
+                            <a href="https://www.linkedin.com/in/emilydavis" target="_blank">🔗</a>
+                            <a href="https://github.com/emilydavis" target="_blank">🐙</a>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- Chatbot Toggle Button -->
+    <button id="chatbot-button">💬</button>
+
+    <!-- Chatbot Window -->
+    <div id="chatbot-window" class="chatbot-window" style="display: none; position: fixed; bottom: 80px; right: 20px; width: 300px; background-color: white; border-radius: 8px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); padding: 10px;">
+        <div id="chatbot-header" style="font-size: 18px; font-weight: bold; padding: 10px; background-color: #007bff; color: white; border-radius: 8px 8px 0 0;">
+            Maid Service Chatbot
+        </div>
+        <div id="chatbot-messages" style="overflow-y: auto; max-height: 200px; margin: 10px 0; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+            <!-- Messages will be displayed here -->
+        </div>
+        <input id="chatbot-input" type="text" placeholder="Ask me anything..." style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd;">
+        <button id="send-message" class="btn btn-primary" style="width: 100%; border-radius: 8px; margin-top: 5px;">Send</button>
+    </div>
+
+    <script src="static/js/script.js"></script>
+    <script src="static/js/chatbot.js"></script>
+</body>
+
+</html>

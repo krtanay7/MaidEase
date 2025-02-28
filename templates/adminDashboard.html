@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link href="static/css/styles.css" rel="stylesheet" />
+  <link href="static/css/chatbot.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+  <title>Admin Dashboard</title>
+  <style>
+/* General styles */
+body {
+    font-family: 'Roboto', sans-serif; /* Added Google font for modern look */
+    background: url("{{ url_for('static', filename='images/bg.jpg') }}") no-repeat center center fixed;
+    background-size: cover;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    background-color: rgb(223, 232, 239);
+}
+
+h3, h5, th {
+    font-weight: bolder;
+}
+
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background: linear-gradient(to right, #4caf50, #3e8e41); /* Gradient background */
+    color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for top bar */
+}
+
+.top-bar h2 {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.top-bar button {
+    background-color: #fff;
+    color: #4caf50;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.top-bar button:hover {
+    background-color: #636763;
+    transform: scale(1.05); /* Slightly enlarge button on hover */
+}
+
+#logoutButton {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+#logoutButton:hover {
+    background-color: #c82333;
+}
+
+.container {
+    margin-top: 80px;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Sidebar styles */
+.card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.card h5 {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.list-group-item {
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.list-group-item:hover {
+    background-color: #f1f1f1;
+    transform: scale(1.03); /* Slightly enlarge list items on hover */
+}
+
+.table th, .table td {
+    text-align: center;
+}
+
+.table th {
+    background-color: #f7f7f7;
+    font-weight: bold;
+}
+
+.table td {
+    background-color: #fff;
+    border: 1px solid #ddd;
+}
+
+/* Profile Popup (Admin's Profile) */
+.popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 100;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+.popup-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+#closePopup {
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: #dc3545;
+    border: none;
+    background: none;
+    float: right;
+    transition: transform 0.3s ease;
+}
+
+#closePopup:hover {
+    transform: rotate(90deg);
+}
+
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 100;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-chart-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 500px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Buttons */
+.btn-primary, .btn-info, .btn-danger {
+    border-radius: 5px;
+    padding: 10px 20px;
+    transition: transform 0.2s ease;
+}
+
+.btn-primary:hover, .btn-info:hover, .btn-danger:hover {
+    transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+/* Table Hover Effects */
+.table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Pie Chart Hover Effects */
+#myPieChart {
+    transition: transform 0.3s ease;
+}
+
+#myPieChart:hover {
+    transform: scale(1.05);
+}
+
+/* Overlay style */
+.overlay {
+    display: none; /* Initially hidden */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent gray background */
+    z-index: 9999; /* Ensure it appears above other content */
+    justify-content: center;
+    align-items: center;
+}
+
+/* Style for the popup chart container */
+.popup-chart-container {
+    position: relative;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Style for the close button */
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 30px;
+    background: none;
+    border: none;
+    color: #333;
+    cursor: pointer;
+}
+
+.close-btn:hover {
+    color: red; /* Change the color to red when hovering */
+}
+
+/* Style for the "View Reports" button */
+.btn {
+    margin-top: 20px;
+}
+
+ /* Chat Box CSS  */
+
+    .chat-popup {
+        display: none;
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 300px;
+        background: white;
+        border: 1px solid #ccc;
+        padding: 15px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+    }
+    .chat-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: bold;
+    }
+    .close-btn {
+        background:transparent;
+        color: black;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+    }
+    .chat-messages {
+        height: 250px;
+        overflow-y: auto;
+        border: 1px solid #ddd;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+</style>
+
+
+
+
+  </style>
+</head>
+<body>
+  <!-- Top bar with admin info and logout button -->
+  <div class="top-bar">
+    <button id="profileButton"><i class="fa-solid fa-user"></i></button>
+    <h2>Welcome Admin</h2>
+    <a href="/logout" class="btn btn-danger" id="logoutButton">Logout</a>
+    
+  </div>
+  
+
+  <!-- Admin Dashboard Content -->
+  <div class="container">
+    <div class="row">
+      <!-- Sidebar Section -->
+      <div class="col-md-3">
+        <div class="card p-3">
+          <h5>Admin Menu</h5>
+          <ul class="list-group">
+            <li class="list-group-item"><a href="#customerSection">Manage Customers</a></li>
+            <li class="list-group-item"><a href="#maidSection">Manage Maids</a></li>
+            <li class="list-group-item"><a href="#bookingSection">Manage Bookings</a></li>
+            <li class="list-group-item"><a href="#reportsSection">View Reports</a></li>
+          </ul>
+          <!-- Chatbox Section -->
+<div id="chatbox" class="chatbox">
+    <div class="chatbox-header">
+      <h5>Admin Chat</h5>
+      <button id="closeChatBox" class="close-btn">&times;</button>
+    </div>
+    <div id="chatMessages" class="chatbox-messages"></div>
+    <div class="chatbox-input">
+      <input type="text" id="messageInput" class="chat-input" placeholder="Type a message..." />
+      <button id="sendMessageBtn" class="btn btn-info">Send</button>
+    </div>
+  </div>
+  
+  <!-- Button to toggle the chatbox -->
+  <button id="toggleChatButton" class="btn btn-primary chatbox-toggle">Chat with Admin</button>
+  
+        </div>
+      </div>
+
+      <!-- Content Area -->
+      <div class="col-md-9">
+        <!-- Manage Customers -->
+        <div id="customerSection">
+          <h3>Customer Details</h3>
+          <table class="table table-bordered">
+              <thead>
+                  <tr>
+                      <th>ID</th>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Phone</th>
+                      <th>Location</th>
+                      <th>Actions</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  {% for customer in customers %}
+                  <tr>
+                      <td>{{ customer[0] }}</td>
+                      <td>{{ customer[1] }}</td>
+                      <td>{{ customer[2] }}</td>
+                      <td>{{ customer[3] }}</td>
+                      <td>{{ customer[4] }}</td>
+                      <td>
+                          <button class="btn btn-info btn-action">View</button>
+                          <button class="btn btn-danger btn-action">Delete</button>
+                          <!-- <button class="btn btn-primary chat-btn" data-customer-id="{{ customer[0] }}">
+                              Chat with {{ customer[1] }}
+                          </button> -->
+                          <!-- Chat Button -->
+                            <button class="btn btn-primary chat-btn" 
+                            data-customer-id="{{ customer[0] }}" 
+                            data-customer-name="{{ customer[1] }}">
+                            Chat with {{ customer[1] }}
+                            </button>
+
+                      </td>
+                  </tr>
+                  {% endfor %}
+              </tbody>
+          </table>
+      </div>
+
+              <!-- chat box  -->
+              <div id="chatBox" class="chat-popup">
+                <div class="chat-header">
+                    <h5>Chat with <span id="customerName"></span></h5>
+                    <button id="closeChatBtn" class="close-btn">&times;</button>
+                </div>
+                <div id="chatMessages" class="chat-messages"></div>
+                <textarea id="chatInput" class="form-control mt-2" placeholder="Type a message..."></textarea>
+                <button id="sendChatBtn" class="btn btn-success mt-2">Send</button>
+            </div>
+
+            
+            
+
+
+        <!-- Manage Maids -->
+        <div id="maidSection" class="mt-5">
+          <h3>Maid Details</h3>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Location</th>
+                <th>Skills</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for maid in maids %}
+                <tr>
+                  <td>{{ maid[0] }}</td>
+                  <td>{{ maid[1] }}</td>
+                  <td>{{ maid[2] }}</td>
+                  <td>{{ maid[3] }}</td>
+                  <td>{{ maid[4] }}</td>
+                  <td>{{ maid[5] }}</td>
+                  <td>
+                    <button class="btn btn-info btn-action">View</button>
+                    <button class="btn btn-danger btn-action">Delete</button>
+                    <!-- <button class="btn btn-primary chat-btn" data-maid-id="{{ maid[0] }}">
+                      Chat with {{ maid[1] }}
+                  </button>  -->
+                  <button class="btn btn-primary chat-btn" 
+                  data-customer-id="{{ maid[0] }}" 
+                  data-customer-name="{{ maid[1] }}">
+                  Chat with {{ maid[1] }}
+                  </button>
+
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+  
+      
+
+        <!-- Manage Bookings -->
+        <div id="bookingSection" class="mt-5">
+          <h3>Booking Details</h3>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Booking ID</th>
+                <th>Customer</th>
+                <th>Location</th>
+                <th>Phone No.</th>
+                <th>Maid Id</th>
+                <th>Maid Name</th>
+                <th>Booking Date</th>
+                <th>Actions</th>  
+              </tr>
+            </thead>
+            <tbody>
+              {% for booking in bookings %}
+                <tr>
+                  <td>{{ booking[0] }}</td>
+                  <td>{{ booking[1] }}</td>
+                  <td>{{ booking[2] }}</td>
+                  <td>{{ booking[3] }}</td>
+                  <td>{{ booking[4] }}</td>  
+                  <td>{{ booking[5] }}</td>
+                  <td>{{ booking[7] }}</td>
+                  <td>
+                    <button class="btn btn-info btn-action">View</button>
+                    <button class="btn btn-danger btn-action">Delete</button>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+
+          <script>
+
+             //done by tanay 
+  // for chat to customer and maid 
+  
+            document.addEventListener("DOMContentLoaded", function () {
+    let currentCustomerId = null;
+
+    // Select elements
+    const chatBox = document.getElementById("chatBox");
+    const chatMessages = document.getElementById("chatMessages");
+    const chatInput = document.getElementById("chatInput");
+    const sendChatBtn = document.getElementById("sendChatBtn");
+    const closeChatBtn = document.getElementById("closeChatBtn");
+
+    // Ensure chat box starts hidden
+    chatBox.style.display = "none";
+
+    // Open Chat Box when clicking a chat button
+    document.querySelectorAll(".chat-btn").forEach(button => {
+        button.addEventListener("click", function () {
+            currentCustomerId = this.getAttribute("data-customer-id");
+            const customerName = this.getAttribute("data-customer-name");
+
+            if (!currentCustomerId || !customerName) {
+                alert("Error: Missing customer data.");
+                return;
+            }
+
+            // Set customer name in chat header
+            document.getElementById("customerName").innerText = customerName;
+
+            // Show chat box
+            chatBox.style.display = "block";
+
+            // Load chat messages
+            loadChatMessages();
+        });
+    });
+
+    // Close Chat Box
+    closeChatBtn.addEventListener("click", function () {
+        chatBox.style.display = "none";
+    });
+
+    // Load Messages for the Selected Customer
+    function loadChatMessages() {
+        if (!currentCustomerId) return;
+
+        fetch(`/get_messages/${currentCustomerId}`)
+            .then(response => response.json())
+            .then(messages => {
+                chatMessages.innerHTML = "";
+
+                messages.forEach(msg => {
+                    const msgElement = document.createElement("div");
+                    msgElement.classList.add("message");
+                    msgElement.style.padding = "5px";
+                    msgElement.style.marginBottom = "5px";
+                    msgElement.style.borderRadius = "5px";
+
+                    if (msg.sender_type === "admin") {
+                        msgElement.style.backgroundColor = "#d1e7dd"; // Green for admin
+                        msgElement.innerText = `Admin: ${msg.message}`;
+                    } else {
+                        msgElement.style.backgroundColor = "#f8d7da"; // Red for customer
+                        msgElement.innerText = `Customer: ${msg.message}`;
+                    }
+
+                    chatMessages.appendChild(msgElement);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                });
+            })
+            .catch(error => console.error("Error loading messages:", error));
+    }
+
+    // Send Message
+    sendChatBtn.addEventListener("click", function () {
+        const messageText = chatInput.value.trim();
+        if (!currentCustomerId || messageText === "") return;
+
+        fetch("/send_message", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                receiver_id: currentCustomerId,
+                receiver_type: "customer",
+                message: messageText
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                loadChatMessages();
+                chatInput.value = "";
+            } else {
+                alert("Message failed to send.");
+            }
+        })
+        .catch(error => console.error("Error sending message:", error));
+    });
+});
+</script>
+<script src="//code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+    var currentUser = 'Admin';  // You can set this dynamically based on logged-in user
+
+    function sendMessage() {
+        const message = $('#chatInput').val();
+        if (message) {
+            const data = {
+                user: currentUser,
+                message: message
+            };
+            $.ajax({
+                url: '/send_message',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: function(response) {
+                    $('#chatInput').val('');
+                    getMessages();  // Refresh messages after sending
+                }
+            });
+        }
+    }
+
+    function getMessages() {
+        $.ajax({
+            url: '/get_messages',
+            type: 'GET',
+            success: function(response) {
+                $('#chatMessages').empty();
+                response.forEach(function(msg) {
+                    $('#chatMessages').append('<p><strong>' + msg.user + ':</strong> ' + msg.message + '</p>');
+                });
+            }
+        });
+    }
+
+    // Poll for new messages every 2 seconds
+    setInterval(getMessages, 2000);
+
+    // Close chatbox
+    $('#closeChatBtn').click(function() {
+        $('#chatBox').hide();
+    });
+</script>
+
+<!-- 
+<script>
+// send messages 
+document.getElementById("sendChatBtn").addEventListener("click", function () {
+    const messageText = document.getElementById("chatInput").value.trim();
+    if (!currentCustomerId || messageText === "") return;
+
+    fetch("/send_message", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            sender_id: currentUserId, // Admin, Maid, or Customer
+            sender_type: currentUserType, // 'admin' | 'maid' | 'customer'
+            receiver_id: currentCustomerId,
+            receiver_type: "customer",
+            message: messageText
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            loadChatMessages();
+            document.getElementById("chatInput").value = "";
+        } else {
+            alert("Message failed to send.");
+        }
+    })
+    .catch(error => console.error("Error sending message:", error));
+});
+
+// for fetch messages 
+
+document.getElementById("sendChatBtn").addEventListener("click", function () {
+    const messageText = document.getElementById("chatInput").value.trim();
+
+    if (!currentCustomerId || messageText === "") return;
+
+    fetch("/send_message", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            receiver_id: currentCustomerId,
+            receiver_type: "customer",
+            message: messageText
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            loadChatMessages(); // Refresh messages
+            document.getElementById("chatInput").value = "";
+        } else {
+            alert("Message failed to send."); // <---- ERROR HANDLER
+        }
+    })
+    .catch(error => console.error("Error sending message:", error));
+});
+</script> -->
+
+          
+
+<!-- Gray Transparent Overlay and Pie Chart -->
+<div id="overlay" class="overlay">
+  <div class="popup-chart-container">
+    <h4>Reports</h4>
+    <button id="closeReport" class="close-btn">&times;</button> <!-- Close Button -->
+    <canvas id="myPieChart" width="300" height="300"></canvas>
+  </div>
+</div>
+
+<!-- Add "View Reports" Button -->
+<div class="text-center mt-4">
+  <button id="viewReportsButton" class="btn btn-primary">View Reports</button>
+</div>
+ 
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Profile Popup (Admin's Profile) -->
+  <div id="profilePopup" class="popup">
+    <div class="popup-content">
+      <button id="closePopup">&times;</button>
+      <div class="container">
+        <h3>Admin Profile</h3>
+        <form>
+          <!-- Admin Details -->
+          <div class="form-group">
+            <label for="adminName">Name</label>
+            <input type="text" class="form-control" id="adminName" value="{{ admin_name }}" readonly>
+          </div>
+
+          <div class="form-group">
+            <label for="adminDesignation">Designation</label>
+            <input type="text" class="form-control" id="adminDesignation" value="{{ admin_designation }}" readonly>
+          </div>
+
+          <div class="form-group">
+            <label for="adminDOB">Date of Birth</label>
+            <input type="date" class="form-control" id="adminDOB" value="{{ admin_dob }}" readonly>
+          </div>
+
+          <div class="form-group">
+            <label for="adminPhone">Phone</label>
+            <input type="text" class="form-control" id="adminPhone" value="{{ admin_phone }}" readonly>
+          </div>
+
+          <div class="form-group">
+            <label for="adminEmail">Email</label>
+            <input type="email" class="form-control" id="adminEmail" value="{{ admin_email }}" readonly>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+
+  <script src="static/js/script.js"></script>
+  <script src="static/js/chatbot.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+   <script>
+    // Open Profile Popup when profile button is clicked
+    document.getElementById('profileButton').addEventListener('click', () => {
+      document.getElementById('profilePopup').style.display = 'flex'; // Show popup
+    });
+
+    // Close Profile Popup when close button is clicked
+    document.getElementById('closePopup').addEventListener('click', () => {
+      document.getElementById('profilePopup').style.display = 'none'; // Hide popup
+    });
+  
+  </script>
+<script>
+  <!-- // Open the overlay and display the pie chart when "View Reports" is clicked
+document.getElementById('viewReportsButton').addEventListener('click', () => {
+  document.getElementById('overlay').style.display = 'flex'; // Show overlay
+  generatePieChart(); // Generate the pie chart
+});
+
+// Generate the Pie Chart using Chart.js
+function generatePieChart() {
+  // Get the values from the template (passed from Flask backend)
+  var customerCount = {{ customer_count }};
+  var maidCount = {{ maid_count }};
+  var bookingCount = {{ booking_count }};
+  
+  var ctx = document.getElementById('myPieChart').getContext('2d');
+  var myPieChart = new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: ['Customers', 'Maids', 'Bookings'],
+      datasets: [{
+        label: 'Counts',
+        data: [customerCount, maidCount, bookingCount],
+        backgroundColor: ['#FF5733', '#33FF57', '#3357FF'],
+        borderColor: ['#fff', '#fff', '#fff'],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'top',
+        },
+        tooltip: {
+          callbacks: {
+            label: function(tooltipItem) {
+              return tooltipItem.label + ': ' + tooltipItem.raw;
+            }
+          }
+        }
+      }
+    }
+  });
+}
+
+
+
+
+// Open the report overlay when the "View Reports" button is clicked
+document.getElementById('viewReportsButton').addEventListener('click', function() {
+    document.getElementById('overlay').style.display = 'flex'; // Use 'flex' to center the content
+});
+
+// Close the report overlay when the cross button is clicked
+document.getElementById('closeReport').addEventListener('click', function() {
+    document.getElementById('overlay').style.display = 'none';
+}); -->
+
+
+</script>
+<!-- 
+
+<script>
+
+// Open and close the chatbox
+document.getElementById('toggleChatButton').addEventListener('click', function() {
+  var chatbox = document.getElementById('chatbox');
+  chatbox.style.display = (chatbox.style.display === 'none' || chatbox.style.display === '') ? 'block' : 'none';
+});
+
+// Close the chatbox when the close button is clicked
+document.getElementById('closeChatBox').addEventListener('click', function() {
+  document.getElementById('chatbox').style.display = 'none';
+});
+
+// Handle sending messages
+document.getElementById('sendMessageBtn').addEventListener('click', function() {
+  var messageInput = document.getElementById('messageInput');
+  var message = messageInput.value.trim();
+
+  if (message) {
+    // Append the message to the chat window
+    var chatMessages = document.getElementById('chatMessages');
+    var messageDiv = document.createElement('div');
+    messageDiv.classList.add('chat-message');
+    messageDiv.textContent = message;
+    chatMessages.appendChild(messageDiv);
+
+    // Scroll to the bottom of the chat
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    // Clear the input field
+    messageInput.value = '';
+
+    // Here you can add code to send the message to your server and notify the maids/customers
+    // For now, it's just appended to the chat display
+  }
+});
+
+// Automatically show the "Chat with Admin" button when the page loads
+document.getElementById('toggleChatButton').style.display = 'block';
+
+</script> --> 
+
+<script>
+ 
+</script>
+
+</body>
+</html>

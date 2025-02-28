@@ -1,0 +1,195 @@
+    <script>// JavaScript to toggle the content display
+        document.querySelector('.read-more-btn').addEventListener('click', function () {
+            var content = document.querySelector('.content');
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+                this.textContent = 'Read Less'; // Change button text to "Read Less"
+            } else {
+                content.style.display = 'none';
+                this.textContent = 'Read More'; // Change button text back to "Read More"
+            }
+        });
+
+        window.onscroll = function() {
+        if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+            scrollToTopBtn.style.display = "block"; // Show button
+        } else {
+            scrollToTopBtn.style.display = "none"; // Hide button
+        }
+    };
+
+    // Scroll to top when button is clicked
+    scrollToTopBtn.addEventListener("click", function() {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth" // Smooth scroll
+        });
+    })
+
+    // reveiws
+    
+var swiper = new Swiper(".review-slider", {
+    spaceBetween: 20,
+    loop:true,
+    autoplay: {
+        delay: 2500,
+        disableOnInteraction: false,
+    },
+    breakpoints: {
+        640: {
+          slidesPerView: 1,
+        },
+        768: {
+          slidesPerView: 2,
+        },
+        1024: {
+          slidesPerView: 3,
+        },
+    },
+});
+</script>
+<script>
+// pop up login form 
+// Select elements
+let formBtn = document.querySelector("#login-btn2"); // Button to open form
+let loginForm = document.querySelector(".login-form-container"); // Login form container
+let formClose = document.querySelector("#form-close"); // Close button
+
+// Ensure the login form is hidden on page load
+window.onload = () => {
+    loginForm.classList.remove("active");
+};
+
+// Function to show login form
+formBtn.addEventListener("click", () => {
+    loginForm.classList.add("active"); // Add 'active' class to show form
+});
+
+// Function to close login form
+formClose.addEventListener("click", () => {
+    loginForm.classList.remove("active"); // Remove 'active' class to hide form
+});
+
+// Close the form when clicking outside of it
+window.addEventListener("click", (event) => {
+    if (event.target === loginForm) {
+        loginForm.classList.remove("active");
+    }
+});
+
+    </script>
+
+
+    #scrollToTopBtn {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    bottom: 20px; /* 20px from the bottom */
+    right: 30px; /* 30px from the right */
+    z-index: 100; /* Sit on top */
+    border:none; /* No border */
+    border-radius: 100px; /* Rounded corners */
+    padding: 10px 9px; /* Some padding */
+    cursor: pointer; /* Pointer cursor on hover */
+}
+
+#scrollToTopBtn:hover{
+    background-color: #000000;
+    color: rgb(255, 255, 255);
+}
+
+/* pop up login form  */
+
+/* Ensure the login form is hidden by default */
+.login-form-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10000;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: none; /* Hide the login form initially */
+  align-items: center;
+  justify-content: center;
+}
+
+/* When the 'active' class is added, show the login form */
+.login-form-container.active {
+  display: flex; /* Show the form when active */
+}
+
+.login-form-container .card {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 15px;
+  width: 50rem;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.login-form-container form {
+  width: 100%;
+}
+
+.login-form-container form h3 {
+  font-size: 3rem;
+  color: rgb(129, 128, 128);
+  text-transform: uppercase;
+  text-align: center;
+  padding: 1rem 0;
+}
+
+.login-form-container form .box {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.7rem;
+  color: #333;
+  margin: 0.6rem 0;
+  border: 0.3rem solid rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+}
+
+.login-form-container form .box:focus {
+  border-color: #007bff; /* Fixing undefined variable */
+}
+
+.login-form-container form label {
+  font-size: 1.5rem;
+}
+
+.login-form-container form .btn {
+  display: block;
+  width: 100%;
+}
+
+.login-form-container form p {
+  padding: 0.5rem 0;
+  font-size: 1.5rem;
+  color: #666;
+}
+
+.login-form-container form p a {
+  color: #007bff;
+}
+
+.login-form-container form p a:hover {
+  color: #333;
+  text-decoration: underline;
+}
+
+/* Close Button - Fixed Position */
+.login-form-container #form-close {
+  position: absolute;
+  top: 1rem;
+  right: 1.5rem;
+  font-size: 2rem;
+  color: #333;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+/* Reveiws */
+
+
+
