@@ -1,9 +1,12 @@
 from flask import Flask, jsonify, render_template, request, redirect, url_for, flash, session
+from flask import Flask, jsonify, request, abort, session
+from functools import wraps
 from flask_mysqldb import MySQL
 from bcrypt import hashpw, gensalt, checkpw
 from datetime import datetime, time
 from flask_mail import Mail, Message
 from functools import wraps
+
 
 
 app = Flask(__name__)
@@ -100,20 +103,17 @@ CREATE TABLE IF NOT EXISTS bookings (
        
         
         cursor.execute('''
-        CREATE TABLE IF NOT EXISTS messages (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            sender_id INT NOT NULL,
-            sender_type ENUM('admin', 'customer', 'maid') NOT NULL,
-            receiver_id INT NOT NULL,
-            receiver_type ENUM('admin', 'customer', 'maid') NOT NULL,
-            message TEXT NOT NULL,
-            timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            is_read BOOLEAN DEFAULT FALSE,
-            FOREIGN KEY (sender_id) REFERENCES customers(id) ON DELETE CASCADE,
-            FOREIGN KEY (receiver_id) REFERENCES customers(id) ON DELETE CASCADE
-        );
-        ''')
-        
+    CREATE TABLE IF NOT EXISTS messages (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        sender_id INT NOT NULL,
+        sender_type ENUM('admin', 'customer', 'maid') NOT NULL,
+        receiver_id INT NOT NULL,
+        receiver_type ENUM('admin', 'customer', 'maid') NOT NULL,
+        message TEXT NOT NULL,
+        timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        is_read BOOLEAN DEFAULT FALSE
+    );
+''')
         # Commit the changes
     mysql.connection.commit()
     cursor.close()
@@ -338,6 +338,9 @@ def customer_dashboard():
     
     return render_template('customers_dashboard.html', user_name=user_name,phone_no=phone_no,email = email,location = location,maids=maids, bookings=bookings)
 
+
+
+
 @app.route('/maid_dashboard')
 def maid_dashboard():
     # Check if the user is logged in
@@ -513,6 +516,7 @@ def submit_booking():
     return redirect(url_for('confirm_booking',user_name=user_name, customer_name=customer_name, maid_name = maid_name))
 
 
+
 # Route to show booking confirmation
 @app.route('/confirm_booking.html')
 def confirm_booking():
@@ -541,6 +545,16 @@ def tearmsAndConditionMaid():
 def Services():
     return render_template('services.html')
 
+from functools import wraps
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'user_id' not in session:
+            flash('Please log in to access this page.', 'danger')
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return decorated_function
 
 @app.route('/adminDashboard')
 def adminDashboard():
@@ -548,7 +562,7 @@ def adminDashboard():
     cur = mysql.connection.cursor()
     cur.execute("SELECT name, designation, dob, phone, email FROM admins WHERE id = 1")
     admin_data = cur.fetchone()  # Assuming there's only one admin with id = 1
-    
+     
     # Extract the data
     admin_name = admin_data[0]
     admin_designation = admin_data[1]
@@ -591,40 +605,111 @@ def adminDashboard():
                            maid_count=maid_count,
                            booking_count=booking_count)
 
-# In-memory storage for messages (consider using a database in production)
-messages = {}
+@app.route('/admin/send_message_to_maid', methods=['POST'])
+def send_message_to_maid():
+    if 'user_id' not in session or session.get('user_role') != 'Admin':
+        return jsonify({'error': 'Unauthorized'}), 403
 
-@app.route('/send_message', methods=['POST'])
-def send_message():
     data = request.get_json()
-    room = data['room']
-    sender = data['sender']
-    message = data['message']
-    timestamp = time.time()
-    
-    if room not in messages:
-        messages[room] = []
-    messages[room].append({
-        'sender': sender,
-        'message': message,
-        'timestamp': timestamp
-    })
-    return jsonify({'status': 'Message sent'}), 200
+    maid_id = data.get('maid_id')
+    message = data.get('message')
 
-@app.route('/get_messages/<room>/<float:last_timestamp>', methods=['GET'])
-def get_messages(room, last_timestamp):
-    start_time = time.time()
-    timeout = 30  # seconds
-    while True:
-        new_messages = [
-            msg for msg in messages.get(room, [])
-            if msg['timestamp'] > last_timestamp
-        ]
-        if new_messages:
-            return jsonify(new_messages), 200
-        if time.time() - start_time > timeout:
-            return jsonify([]), 200
-        time.sleep(1)  # sleep to prevent CPU overuse 
+    if not maid_id or not message:
+        return jsonify({'error': 'Maid ID and message are required'}), 400
+
+    try:
+        cursor = mysql.connection.cursor()
+        cursor.execute("""
+            INSERT INTO messages (sender_id, sender_type, receiver_id, receiver_type, message, is_read)
+            VALUES (%s, 'admin', %s, 'maid', %s, FALSE)
+        """, (session['user_id'], maid_id, message))
+        mysql.connection.commit()
+        cursor.close()
+
+        return jsonify({'success': 'Message sent successfully!'}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+@app.route('/maid/get_notifications', methods=['GET'])
+def get_maid_notifications():
+    if 'user_id' not in session or session.get('user_role') != 'Maid':
+        return jsonify([])  # Instead of returning an error, return an empty list
+
+    try:
+        cursor = mysql.connection.cursor()
+        cursor.execute("""
+            SELECT message, timestamp FROM messages
+            WHERE receiver_id = %s AND receiver_type = 'maid' AND is_read = FALSE
+            ORDER BY timestamp DESC
+        """, (session['user_id'],))
+        messages = cursor.fetchall()
+        cursor.close()
+
+        return jsonify([{'message': msg[0], 'timestamp': msg[1]} for msg in messages])
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+
+@app.route('/admin/send_message', methods=['POST'])
+def send_message():
+    if 'user_id' not in session:  # Ensure admin is logged in
+        return jsonify({'error': 'Unauthorized'}), 401
+
+    data = request.json
+    customer_id = data.get('customer_id')
+    message = data.get('message')
+
+    if not customer_id or not message:
+        return jsonify({'error': 'Missing data'}), 400
+
+    try:
+        cur = mysql.connection.cursor()
+        cur.execute("""
+            INSERT INTO messages (sender_id, sender_type, receiver_id, receiver_type, message, is_read)
+            VALUES (%s, 'admin', %s, 'customer', %s, FALSE)
+        """, (session['user_id'], customer_id, message))
+        mysql.connection.commit()
+        cur.close()
+        return jsonify({'success': True, 'message': 'Message sent successfully!'})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/customer/messages', methods=['GET'])
+def get_customer_messages():
+    if 'user_id' not in session:
+        return jsonify({'error': 'Unauthorized'}), 401
+
+    customer_id = session['user_id']
+    
+    cur = mysql.connection.cursor()
+    cur.execute("""
+        SELECT id, message, timestamp, is_read FROM messages 
+        WHERE receiver_id = %s AND receiver_type = 'customer'
+        ORDER BY timestamp DESC
+    """, (customer_id,))
+    messages = cur.fetchall()
+    cur.close()
+
+    return jsonify([
+        {'id': msg[0], 'content': msg[1], 'timestamp': msg[2].strftime('%Y-%m-%d %H:%M:%S'), 'is_read': msg[3]}
+        for msg in messages
+    ])
+@app.route('/customer/mark_read/<int:message_id>', methods=['POST'])
+def mark_message_as_read(message_id):
+    if 'user_id' not in session:
+        return jsonify({'error': 'Unauthorized'}), 401
+
+    cur = mysql.connection.cursor()
+    cur.execute("""
+        UPDATE messages SET is_read = TRUE WHERE id = %s AND receiver_id = %s
+    """, (message_id, session['user_id']))
+    mysql.connection.commit()
+    cur.close()
+
+    return jsonify({'success': True, 'message': 'Message marked as read'})
+
+
 
 
 @app.route('/admin')

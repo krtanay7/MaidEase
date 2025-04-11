@@ -9,119 +9,141 @@
     <title>Register Maid</title>
 
     <style>
-        body {
-            background: url("{{ url_for('static', filename='images/bg.jpg') }}") no-repeat center center fixed;
-            background-size: cover;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Arial', sans-serif;
-            color: black; /* Change text color to white */
-            margin: 0; /* Remove default margin */
-            overflow: hidden; /* Prevent horizontal scroll */
-        }
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
 
-        .card {
-            max-width: 500px;
-            width: 100%;
-            border-radius: 12px;
-            padding: 30px;
-            background: linear-gradient(135deg, rgb(166, 214, 233) 0%, #fad0c4 100%); /* Add gradient background */
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease-in-out;
-            backdrop-filter: blur(10px); /* Add blur effect */
-            max-height: 95vh; /* Allow the card to take up most of the height */
-            overflow-y: auto; /* Enable scrolling inside the card if necessary */
-        }
+/* Background Styling */
+body {
+    background: url("{{ url_for('static', filename='images/bg.jpg') }}") no-repeat center center fixed;
+    background-size: cover;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Poppins', sans-serif;
+    color: black;
+    margin: 0;
+    overflow: hidden;
+    position: relative;
+}
 
-        .card:hover {
-            box-shadow: 0 12px 24px rgba(33, 105, 135, 0.3);
-            transform: translateY(-5px);
-        }
+/* Dark Transparent Overlay */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: -1;
+}
 
-        h2 {
-            font-size: 28px;
-            color: #333;
-            margin-bottom: 30px;
-            text-align: center;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Add text shadow */
-        }
+/* Glassmorphism Card */
+.card {
+    max-width: 500px;
+    width: 100%;
+    border-radius: 16px;
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.548);
+    backdrop-filter: blur(15px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    max-height: 95vh;
+    overflow-y: auto;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
 
-        .form-control {
-            border-radius: 5px;
-            margin-bottom: 20px;
-            padding: 12px;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            background-color: rgba(255, 255, 255, 0.8); /* Slightly transparent input background */
-        }
+/* Card Hover Effect */
+.card:hover {
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.35);
+    transform: translateY(-5px);
+}
 
-        .form-control:focus {
-            border-color: #ff6f61;
-            box-shadow: 0 0 5px rgba(255, 111, 97, 0.5);
-        }
+/* Heading Styling */
+h2 {
+    font-size: 30px;
+    font-weight: 600;
+    color:  #0056b3;
+    text-align: center;
+    margin-bottom: 25px;
+    text-shadow: 2px 2px 6px rgba(246, 164, 164, 0.414);
+}
 
-        .btn-primary {
-            background-color: #ff6f61;
-            border: none;
-            border-radius: 5px;
-            padding: 12px;
-            font-size: 16px;
-            width: 100%;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-        }
+/* Form Fields */
+.form-control {
+    border-radius: 8px;
+    margin-bottom: 20px;
+    padding: 12px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
 
-        .btn-primary:hover {
-            background-color: rgb(232, 80, 69);
-            transform: translateY(-2px);
-        }
+.form-control:focus {
+    border-color: #ff6f61;
+    box-shadow: 0 0 8px rgba(255, 111, 97, 0.5);
+}
 
-        /* Add gradient overlay */
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.4); /* Dark transparent overlay */
-            z-index: -1;
-        }
+/* Button Styling */
+.btn-primary {
+    background: linear-gradient(135deg,  #0056b3, #7bccfe);
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 16px;
+    width: 100%;
+    font-weight: bold;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
 
-        /* Scroll to Top Button */
-        #scroll-to-top {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            font-size: 24px;
-            display: none; /* Hidden by default */
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        }
+.btn-primary:hover {
+    background: linear-gradient(135deg, #ff9472, #ff6f61);
+    transform: translateY(-2px) scale(1.05);
+}
 
-        #scroll-to-top:hover {
-            background-color: #0056b3;
-        }
+/* Flash Message Styling */
+.alert-success {
+    background-color: rgba(40, 167, 69, 0.9);
+    color: white;
+    border-radius: 8px;
+    text-align: center;
+    padding: 10px;
+    margin-bottom: 20px;
+}
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .card {
-                padding: 20px;
-            }
+/* Scroll to Top Button */
+#scroll-to-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
 
-            h2 {
-                font-size: 24px;
-            }
-        }
+#scroll-to-top:hover {
+    background: linear-gradient(135deg, #0056b3, #004494);
+    transform: scale(1.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .card {
+        padding: 20px;
+    }
+    h2 {
+        font-size: 26px;
+    }
+}
+
 
     </style>
 </head>
@@ -200,7 +222,7 @@
     </div>
 
     <!-- Scroll to Top Button -->
-    <button id="scroll-to-top">&#8593;</button>
+  
 
     <!-- Chatbot Toggle Button -->
     <button id="chatbot-button">💬</button>

@@ -4,10 +4,11 @@ const backgrounds = [
     "url('/static/images/bg1.jpg')", 
     "url('/static/images/bg2.jpg')",
     "url('/static/images/bg3.jpg')",
-    "url('/static/images/bg4.jpg')", 
+    "url('/static/images/bg4.jpeg')", 
     "url('/static/images/bg5.jpg')",
-    "url('/static/images/bg6.jpg')",
-    "url('/static/images/bg7.jpg')"
+    "url('/static/images/bg6.png')",
+    "url('/static/images/bg7.jpg')",
+    "url('/static/images/bg8.jpg')"
 ];
 
 let currentBackground = 0;
@@ -26,4 +27,4 @@ function changeBackground() {
 changeBackground();
 
 // Change the background every 25 seconds (25000 milliseconds)
-setInterval(changeBackground, 15000);
+setInterval(changeBackground, 8000);

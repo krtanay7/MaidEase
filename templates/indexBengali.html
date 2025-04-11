@@ -13,6 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -22,606 +23,7 @@
     <link href="static/css/styles.css" rel="stylesheet" />
 
     <link href="static/css/chatbot.css" rel="stylesheet" />
-    <style>
-        /* Background Image from static folder */
-        body {
-            background-image: url("{{ url_for('static', filename='images/bg.jpg') }}");
-            background-size: cover;
-            background-position: center;
-            color: #0c31d6;
-            font-family: 'Poppins', sans-serif;
-            height: 100vh;
-            margin: 0;
-        }
-
-        header {
-            background: transparent;
-            padding: 80px 0;
-            text-align: center;
-        }
-
-        header h1 {
-            font-size: 3.5em;
-            letter-spacing: 2px;
-            font-weight: 600;
-        }
-
-        header nav a {
-            transition: transform 0.3s ease, background-color 0.3s ease;
-        }
-
-        header nav a:hover {
-            transform: scale(1.1);
-            background-color: #007bff;
-        }
-
-        .btn {
-            padding: 12px 25px;
-            border-radius: 30px;
-            transition: all 0.3s;
-            margin: 15px;
-        }
-
-        .btn:hover {
-            background-color: #007bff;
-            transform: translateY(-5px);
-        }
-
-        section {
-            background: transparent;
-            padding: 50px 20px;
-            border-radius: 10px;
-            margin-top: -100px;
-            text-align: center;
-        }
-
-        section h2 {
-            font-size: 2.8em;
-            margin-bottom: 20px;
-        }
-
-        .service-list {
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            margin-top: 40px;
-        }
-
-        .service-card {
-            background: rgba(255, 255, 255, 0.8);
-            padding: 30px;
-            border-radius: 12px;
-            width: 22%;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .service-card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-        }
-
-        .service-card h3 {
-            font-size: 1.8em;
-            margin-bottom: 15px;
-            color: #333;
-        }
-
-        .service-card p {
-            font-size: 1.1em;
-            color: #555;
-        }
-
-        .contact-form {
-            background: rgba(255, 255, 255, 0.85);
-            padding: 40px;
-            border-radius: 10px;
-            margin-top: 60px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .contact-form input,
-        .contact-form textarea {
-            margin-bottom: 15px;
-            width: 100%;
-            padding: 14px;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-            font-size: 1em;
-            transition: border 0.3s;
-        }
-
-        .contact-form input:focus,
-        .contact-form textarea:focus {
-            border-color: #007bff;
-            outline: none;
-        }
-
-        .contact-form button {
-            width: 100%;
-            padding: 14px;
-            background-color: #007bff;
-            border: none;
-            border-radius: 8px;
-            color: #fff;
-            font-size: 1.2em;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .contact-form button:hover {
-            background-color: #0056b3;
-        }
-
-
-        /* Footer Styles */
-        footer {
-            background-color: #0c0b0b;
-
-            color: #e8c7c7;
-            padding: 20px 0;
-            text-align: center;
-            font-family: Arial, sans-serif;
-        }
-
-        footer .footer-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            flex-wrap: wrap;
-            gap: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        footer h3 {
-            font-size: 1.4em;
-            margin-bottom: 10px;
-            color: #007bff;
-            font-weight: bold;
-        }
-
-        footer .contact ul,
-        footer .links ul,
-        footer .social-media ul {
-            list-style: none;
-            padding: 0;
-            font-size: 1em;
-        }
-
-        footer .contact li,
-        footer .links li,
-        footer .social-media li {
-            margin-bottom: 8px;
-        }
-
-        footer .contact a,
-        footer .links a,
-        footer .social-media a {
-            text-decoration: none;
-            color: #007bff;
-            transition: color 0.3s;
-        }
-
-        footer .contact a:hover,
-        footer .links a:hover,
-        footer .social-media a:hover {
-            color: #fff;
-        }
-
-        footer .contact i,
-        footer .links i,
-        footer .social-media i {
-            margin-right: 10px;
-        }
-
-        footer .text-center {
-            margin-top: 20px;
-            font-size: 0.9em;
-        }
-
-        /* Responsive Design for Footer */
-        @media (max-width: 768px) {
-            footer .footer-content {
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
-            }
-
-            footer .footer-content>div {
-                width: 100%;
-                margin-bottom: 20px;
-            }
-
-            footer .contact ul,
-            footer .links ul,
-            footer .social-media ul {
-                text-align: center;
-            }
-
-            footer .contact li,
-            footer .links li,
-            footer .social-media li {
-                margin-bottom: 12px;
-            }
-        }
-
-
-        .nav-item {
-            background-color: #f0f0f0;
-            padding: 10px;
-            text-decoration: none;
-            color: #333;
-            transition: background-color 0.3s ease;
-        }
-
-        .nav-item:hover {
-            background: rgb(176, 191, 223);
-            border-radius: 10px;
-        }
-
-        /* CSS for the login button */
-        .login-btn {
-            font-family: 'Arial', sans-serif;
-            font-size: 16px;
-            font-weight: bold;
-            color: #fff;
-            background-color: #007bff;
-            /* Blue background */
-            border: none;
-            border-radius: 5px;
-            padding: 10px 20px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .login-btn:hover {
-            background-color: #0056b3;
-            /* Darker blue on hover */
-        }
-
-        /* CSS for the trusted maid service text */
-        .trusted-maid-service {
-            font-size: 70px;
-            font-weight: bold;
-            padding: 10px;
-            text-align: center;
-        }
-
-
-        /* CSS for the tagline */
-        .tagline {
-            font-size: 22px;
-            font-weight: bold;
-            color: #333;
-            padding: 10px;
-            text-align: left;
-        }
-
-        .mtagline {
-            font-size: 28px;
-            font-weight: bold;
-            background: linear-gradient(to right, rgb(255, 95, 207), #feb47b);
-            border-radius: 20px
-        }
-
-
-
-
-        /* CSS for the Featured Services section */
-
-        .row {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-        }
-
-        .card {
-            margin: 10px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 300px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .card img {
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
-            width: 100%;
-        }
-
-        .card-body {
-            padding: 30px;
-            text-align: center;
-        }
-
-        .card-title {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-
-        .card-text {
-            font-size: 16px;
-            color: #555;
-            text-align: left;
-        }
-
-        .btn-outline-dark {
-            font-size: 16px;
-            font-weight: bold;
-            padding: 10px 20px;
-            border-radius: 5px;
-            transition: background-color 0.3s ease, color 0.3s ease;
-            text-decoration: none;
-            color: #000;
-            border: 2px solid #000;
-            background-color: #fff;
-        }
-
-        .btn-outline-dark:hover {
-            background-color: #000;
-            color: #fff;
-        }
-
-
-        /* CSS for the Why Choose Us section */
-        #why-choose-us {
-            padding: 100px 0;
-            background-color: #f8f9fa;
-        }
-
-        .heading {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 40px;
-        }
-
-        .heading h1 {
-            font-size: 36px;
-            font-weight: bold;
-            margin-right: 20px;
-        }
-
-        .logo {
-            max-width: 100px;
-            height: auto;
-        }
-
-        .reasons {
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-        }
-
-        .reason {
-            margin: 10px;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 300px;
-            text-align: center;
-        }
-
-        .reason img {
-            max-width: 100px;
-            height: auto;
-            margin-bottom: 15px;
-        }
-
-        .reason h3 {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-
-        .reason p {
-            font-size: 16px;
-            color: #555;
-        }
-
-
-
-        /* CSS Highlights */
-
-        .carousel-container {
-            width: 100%;
-            overflow: hidden;
-            background: transparent;
-            padding: 20px;
-            box-shadow: 0 8px 16px rgba(46, 44, 44, 0.4);
-            border-radius: 12px;
-            text-align: center;
-        }
-
-        .carousel-heading {
-            font-size: 30px;
-            font-weight: bold;
-            color: #007bff;
-            margin-bottom: 20px;
-        }
-
-        .carousel {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            animation: scroll 40s linear infinite;
-        }
-
-        .carousel img {
-            width: 200px;
-            height: 200px;
-            margin: 10px;
-            border-radius: 12px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-        }
-
-        .carousel img:hover {
-            transform: scale(1.1);
-        }
-
-        @keyframes scroll {
-            0% {
-                transform: translateX(100%);
-            }
-
-            100% {
-                transform: translateX(-100%);
-            }
-        }
-
-        .map-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .map-container iframe {
-            border: 0;
-            width: 80%;
-            height: 300px;
-            max-width: 1000px;
-            /* Optional: Limit the maximum width for larger screens */
-        }
-
-
-        /* Gradient Overlay */
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.4);
-            /* Dark transparent overlay */
-            z-index: -1;
-        }
-        #scrollToTopBtn {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    bottom: 20px; /* 20px from the bottom */
-    right: 30px; /* 30px from the right */
-    z-index: 100; /* Sit on top */
-    border:none; /* No border */
-    border-radius: 100px; /* Rounded corners */
-    padding: 10px 9px; /* Some padding */
-    cursor: pointer; /* Pointer cursor on hover */
-}
-
-#scrollToTopBtn:hover{
-    background-color: #000000;
-    color: rgb(255, 255, 255);
-}
-
-/* pop up login form  */
-
-/* Ensure the login form is hidden by default */
-.login-form-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 10000;
-  width: 100%;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
-  display: none; /* Hide the login form initially */
-  align-items: center;
-  justify-content: center;
-}
-
-/* When the 'active' class is added, show the login form */
-.login-form-container.active {
-  display: flex; /* Show the form when active */
-}
-
-.login-form-container .card {
-  background: #fff;
-  padding: 2rem;
-  border-radius: 15px;
-  width: 50rem;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-  position: relative;
-}
-
-.login-form-container form {
-  width: 100%;
-}
-
-.login-form-container form h3 {
-  font-size: 3rem;
-  color: rgb(129, 128, 128);
-  text-transform: uppercase;
-  text-align: center;
-  padding: 1rem 0;
-}
-
-.login-form-container form .box {
-  width: 100%;
-  padding: 1rem;
-  font-size: 1.7rem;
-  color: #333;
-  margin: 0.6rem 0;
-  border: 0.3rem solid rgba(0, 0, 0, 0.3);
-  border-radius: 10px;
-}
-
-.login-form-container form .box:focus {
-  border-color: #007bff; /* Fixing undefined variable */
-}
-
-.login-form-container form label {
-  font-size: 1.5rem;
-}
-
-.login-form-container form .btn {
-  display: block;
-  width: 100%;
-}
-
-.login-form-container form p {
-  padding: 0.5rem 0;
-  font-size: 1.5rem;
-  color: #666;
-}
-
-.login-form-container form p a {
-  color: #007bff;
-}
-
-.login-form-container form p a:hover {
-  color: #333;
-  text-decoration: underline;
-}
-
-/* Close Button - Fixed Position */
-.login-form-container #form-close {
-  position: absolute;
-  top: 1rem;
-  right: 1.5rem;
-  font-size: 2rem;
-  color: #333;
-  cursor: pointer;
-  background: none;
-  border: none;
-}
-
-/* Reveiws */
-
-
-
-
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/indexstyle.css') }}">
 </head>
 
 <body>
@@ -747,106 +149,237 @@
             </div>
         </section>
 
-        <!-- Services -->
-        <section id="Services">
-            <div class="container mar-top">
-                <h1 class="mb-5">আমাদের বিশেষ সেবা</h1>
-                <h3 class="mt-5 mtagline">পেশাদার নিয়োগ করুন,<br />আপনার প্রয়োজন অনুযায়ী অভিজ্ঞদের সাথে</h3>
-                <div class="row d-flex justify-content-between">
+                <!-- Services -->
+        
+                <br><br><br><br><br>
+                <section class="services" id="services">
+        
+                    <h1 class="heading">
+                        <span>আমাদের সেবাসমূহ</span>
+                    </h1>
+                    <br />
+                    <div class="box-container">
+                        
+                        <div class="box1">
+                            <i class="fas fa-broom"></i>
+                            <h3>বাড়ি পরিষ্কার</h3>
+                            <p>আমাদের পেশাদার পরিচারিকারা ধুলো মোছা, মোপ করা এবং স্যানিটাইজেশন সহ আপনার বাড়ির গভীর পরিষ্কার নিশ্চিত করে।</p>
+                        </div>
+                
+                        <div class="box1">
+                            <i class="fas fa-child"></i>
+                            <h3>শিশু যত্ন</h3>
+                            <p>প্রশিক্ষিত ও যত্নশীল পরিচারিকারা আপনার শিশুদের দেখাশোনা করবে, সর্বদা নিরাপত্তা ও সঠিক যত্ন নিশ্চিত করবে।</p>
+                        </div>
+                
+                        <div class="box1">
+                            <i class="fas fa-utensils"></i>
+                            <h3>রান্নার সেবা</h3>
+                            <p>আমাদের বিশেষজ্ঞ পরিচারিকারা আপনার পছন্দ ও খাদ্যতালিকাগত প্রয়োজন অনুযায়ী তাজা ও পুষ্টিকর খাবার প্রস্তুত করে।</p>
+                        </div>
+                
+                        <div class="box1">
+                            <i class="fas fa-user-nurse"></i>
+                            <h3>বৃদ্ধ যত্ন</h3>
+                            <p>বৃদ্ধ পরিবারের সদস্যদের জন্য সহানুভূতিশীল পরিচর্যাকারী, দৈনন্দিন কাজে সহায়তা ও সঙ্গদান প্রদান করে।</p>
+                        </div>
+        
+                        <div class="box1">
+                            <i class="fas fa-hand-holding-heart"></i>
+                            <h3>অস্ত্রোপচার পরবর্তী যত্ন</h3>
+                            <p>আমাদের পরিচর্যাকারীরা বাড়িতে অস্ত্রোপচার বা অসুস্থতা থেকে সেরে ওঠা রোগীদের বিশেষায়িত সহায়তা প্রদান করে।</p>
+                        </div>
+        
+                        <div class="box1">
+                            <i class="fas fa-hand-sparkles"></i>
+                            <h3>স্যানিটাইজেশন ও জীবাণুমুক্তকরণ</h3>
+                            <p>পেশাদার গভীর পরিষ্কার ও স্যানিটাইজেশন সেবা যা আপনার বাড়িকে ভাইরাস মুক্ত রাখে।</p>
+                        </div>
+                
+                        <div class="box1">
+                            <i class="fas fa-hands-wash"></i>
+                            <h3>লন্ড্রি সেবা</h3>
+                            <p>আমরা ধোয়া, ইস্ত্রি করা এবং ভাঁজ করার সেবা প্রদান করি, প্রতিদিন পরিষ্কার ও সতেজ পোশাক নিশ্চিত করে।</p>
+                        </div>
+        
+                        <div class="box1">
+                            <i class="fas fa-shower"></i>
+                            <h3>বাথরুম পরিষ্কার</h3>
+                            <p>পেশাদার পরিষ্কার সেবা যা আপনার বাথরুমকে সতেজ, স্যানিটাইজড এবং নিষ্কলঙ্ক রাখে।</p>
+                        </div>
+                
+                        <div class="box1">
+                            <i class="fas fa-paw"></i>
+                            <h3>পোষ্য যত্ন</h3>
+                            <p>প্রশিক্ষিত পেশাদাররা আপনার পোষ্যদের খাওয়ানো, গ্রুমিং এবং নিয়মিত ব্যায়ামের মাধ্যমে দেখাশোনা করবে।</p>
+                        </div>
+        
+                        <div class="box1">
+                            <i class="fas fa-hammer"></i>
+                            <h3>বেসিক ঘর মেরামত</h3>
+                            <p>ছোটখাটো ঘরোয়া মেরামত প্রয়োজন? আমাদের দল মৌলিক মেরামত ও রক্ষণাবেক্ষণের কাজে সাহায্য করতে পারে।</p>
+                        </div>
+        
+                
+                        <div class="box1">
+                            <i class="fas fa-car"></i>
+                            <h3>গাড়ি পরিষ্কার</h3>
+                            <p>আমাদের পরিচারিকারা অভ্যন্তরীণ এবং বাহ্যিক গাড়ি পরিষ্কারের সেবা প্রদান করে, আপনার যানবাহনকে নতুনের মতো দেখাতে।</p>
+                        </div>
+        
+                        <div class="box1">
+                            <i class="fas fa-money-bill-wave"></i>
+                            <h3>নমনীয় পেমেন্ট বিকল্প</h3>
+                            <p>নগদ, UPI, অনলাইন ব্যাংকিং বা ওয়ালেটের মাধ্যমে প্রদান করুন। আপনার সুবিধার জন্য নিরাপদ ও সহজ পেমেন্ট পদ্ধতি।</p>
+                        </div>
+                
+                    </div>
+                
+                </section>
+                
+                
+                
+        
+                <!--আমাদের কেন বেছে নেবেন-->
+                <br><br>
+                <section id="why-choose-us">
+                    <div class="heading">
+                        <h1 class="mb-5">আমাদের কেন বেছে নেবেন</h1>
+                        <img src="./static/images/why_choose_us.jpeg" alt="Company Logo" class="logo">
+                    </div>
+                    <div class="container">
+                        <div class="reasons">
+                
+                            <div class="reason">
+                                <img src="./static/images/verify.png" alt="Verification & Assessment">
+                                <h3>যাচাইকরণ ও মূল্যায়ন</h3>
+                                <p>এআই ব্যবহার করে, আমরা আমাদের কর্মীদের সর্বোচ্চ মানের মূল্যায়ন নিশ্চিত করতে কঠোর শারীরিক ও টেলিফোনিক যাচাই প্রক্রিয়া উন্নত করেছি।</p>
+                            </div>
+                
+                            <div class="reason">
+                                <img src="./static/images/transpart_pricing.png" alt="Transparent Pricing">
+                                <h3>স্বচ্ছ মূল্য নির্ধারণ</h3>
+                                <p>আপনি যা প্রদান করেন তার সম্পূর্ণ মূল্য পাবেন। কোন লুকানো ফি নেই! এছাড়াও আমরা প্রতিস্থাপন গ্যারান্টি, কোভিড-১৯ টেস্ট রিপোর্ট এবং যাচাইকরণ নথি প্রদান করি।</p>
+                            </div>
+        
+                            <div class="reason">
+                                <img src="./static/images/Customer_support.png" alt="Customer Support">
+                                <h3>গ্রাহক সহায়তা</h3>
+                                <p>আমাদের নির্বাহীরা সর্বদা আপনার কথা শুনতে এবং সমস্যার সমাধান করতে প্রস্তুত থাকবে।</p>
+                            </div>
+                
+                
+                            <div class="reason">
+                                <img src="https://cdn-icons-png.flaticon.com/512/2277/2277946.png" alt="Flexible Scheduling">
+                                <h3>নমনীয় সময়সূচী</h3>
+                                <p>আপনার সুবিধামত সময়ে একজন পরিচারিকা বুক করুন - কয়েক ঘন্টা, দৈনিক, খণ্ডকালীন বা পূর্ণকালীন যেকোনো ধরনের সেবার জন্য।</p>
+                            </div>
+                            
+                            <div class="reason">
+                                <img src="https://cdn-icons-png.flaticon.com/512/1735/1735902.png" alt="Affordable Pricing">
+                                <h3>সাশ্রয়ী ও প্রতিযোগিতামূলক মূল্য</h3>
+                                <p>আমরা লুকানো খরচ ছাড়াই সাশ্রয়ী মূল্যে উচ্চমানের সেবা প্রদান করি।</p>
+                            </div>
+                            
+                            <div class="reason">
+                                <img src="https://cdn-icons-png.flaticon.com/512/4320/4320346.png" alt="Emergency Services">
+                                <h3>জরুরী সেবা</h3>
+                                <p>জরুরী পরিষ্কার বা পরিচর্যা প্রয়োজন? আমরা শেষ মুহূর্তের অনুরোধ পূরণের জন্য জরুরী সেবা প্রদান করি।</p>
+                            </div>
+                            
+                            <div class="reason">
+                                <img src="https://cdn-icons-png.flaticon.com/512/2758/2758701.png" alt="Contract-Based Services">
+                                <h3>চুক্তিভিত্তিক ও এককালীন সেবা</h3>
+                                <p>আপনার প্রয়োজনের উপর ভিত্তি করে আমরা দীর্ঘমেয়াদী চুক্তি এবং এককালীন সেবা উভয়ই অফার করি।</p>
+                            </div>
+                            
+                            <div class="reason">
+                                <img src="https://cdn-icons-png.flaticon.com/512/3898/3898082.png"  alt="Multi-Language Support">
+                                <h3>বহুভাষী সমর্থন</h3>
+                                <p>আপনার সুবিধার জন্য আমরা একাধিক ভাষায় যোগাযোগ করতে পারেন এমন পরিচারিকা প্রদান করি।</p>
+                            </div>
+                          </div>
+                    </div>
+                </section>
 
-                    <div class="card" style="width: 18rem;">
-                        <img src="./static/images/m1.jpeg" class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">হাউস ক্লিনিং</h5>
-                            <p class="card-text">এক্সিকিউটিভ মেইডস আপনার ক্লিনিং প্রয়োজনগুলি পরিচালনা করতে সহায়ক!
-                                আমাদের পেশাদার দল বাড়ির পরিষ্কারের সেবা প্রদান করে, যার মধ্যে রয়েছে ধুলো ঝাড়া,
-                                ভ্যাকুয়াম, মপিং এবং আরও অনেক কিছু।
-                                আপনি কোনও প্রচেষ্টা ছাড়াই একটি পরিষ্কার বাড়ি উপভোগ করতে পারবেন। আজই আমাদের সাথে
-                                যোগাযোগ করুন!</p>
+        <!-- Reveiws -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css" />
+
+        <section class="review" id="review">
+            <h1 class="heading">
+                <span>রেভেইস</span>
+            </h1>
+            <br />
+        
+            <div class="swiper review-slider">
+                <div class="swiper-wrapper">
+        
+                    <div class="swiper-slide">
+                        <div class="box">
+                            <img src="static\images\pic1.jpg" alt="Pankaj Tripathi">
+                            <h3>Pankaj Tripathi</h3>
+                            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Porro cumque illum alias accusamus molestiae? Architecto fugit ad, adipisci aspernatur perspiciatis mollitia fuga voluptatibus possimus quas ea enim suscipit. Cum, obcaecati!</p>
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
                         </div>
                     </div>
-
-                    <div class="card" style="width: 18rem;">
-                        <img src="./static/images/m2.jpeg" class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">শিশু সেবা</h5>
-                            <p class="card-text">এক্সিকিউটিভ মেইডস আপনাকে নির্ভরযোগ্য এবং যত্নশীল শিশু সেবা প্রদান করবে।
-                                আমাদের পেশাদার দল আপনার সন্তানের নিরাপত্তা এবং সুস্থতার নিশ্চিতকরণ করে, যাতে আপনি মন
-                                শান্তিতে থাকেন।
-                                আজই আমাদের সাথে যোগাযোগ করুন, আপনি যে শিশুসেবাকে বিশ্বাস করতে পারবেন!</p>
+        
+                    <div class="swiper-slide">
+                        <div class="box">
+                            <img src="static\images/pic2.jfif" alt="Guddu Pandit">
+                            <h3>Guddu Pandit</h3>
+                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit laborum totam voluptate impedit, eum debitis fugit earum quam ipsam quos facere, molestias cumque neque blanditiis ut laboriosam temporibus minus beatae?</p>
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                                <i class="far fa-star"></i>
+                            </div>
                         </div>
                     </div>
-
-                    <div class="card" style="width: 18rem;">
-                        <img src="./static/images/m3.jpeg" class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">রান্না</h5>
-                            <p class="card-text">আপনি সহজেই সুস্বাদু এবং ঘরোয়া খাবারের স্বাদ নিতে পারবেন। আমাদের দক্ষ
-                                রাঁধুনি আপনার পছন্দ অনুযায়ী পুষ্টিকর এবং সুস্বাদু খাবার প্রস্তুত করেন।
-                                বাড়িতে সুস্বাদু খাবারের জন্য আজই এক্সিকিউটিভ মেইডসের সাথে যোগাযোগ করুন!</p>
+        
+                    <div class="swiper-slide">
+                        <div class="box">
+                            <img src="static\images/pic3.jpg" alt="Mia Talerico">
+                            <h3>Mia Talerico</h3>
+                            <p>My mother doesn't speak English very well. She told me to convey this message: It was our best trip ever in India.</p>
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="far fa-star"></i>
+                            </div>
                         </div>
                     </div>
-
-                    <div class="card" style="width: 18rem;">
-                        <img src="./static/images/m4.jpeg" class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">বয়স্ক সেবা</h5>
-                            <p class="card-text">আপনার প্রিয়জনদের প্রাপ্য যত্ন নিশ্চিত করুন। আমাদের পেশাদার দল আপনার
-                                প্রিয়জনদের জন্য সহানুভূতিশীল এবং নির্ভরযোগ্য বয়স্ক সেবা প্রদান করে, যা তাদের প্রয়োজন
-                                অনুযায়ী কাস্টমাইজ করা হয়।
-                                আজই এক্সিকিউটিভ মেইডসের সাথে যোগাযোগ করুন, আপনি যে বয়স্ক সেবাকে বিশ্বাস করতে পারেন!</p>
+        
+                    <div class="swiper-slide">
+                        <div class="box">
+                            <img src="static\images/pic4.jpg" alt="Baburao Ganpatrao Apte">
+                            <h3>Baburao Ganpatrao Apte</h3>
+                            <p>Mast maja aaya! 5 star le re baba tu. Baki mera chashma reh gaya, courier kar dena re baba. Jai Maharashtra.</p>
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
                         </div>
                     </div>
-
+        
                 </div>
             </div>
         </section>
-
-        <!-- Why Choose Us -->
-        <section id="why-choose-us">
-            <div class="container">
-                <div class="heading">
-                    <h1 class="mb-5">কেন আমাদের নির্বাচন করবেন</h1>
-                    <img src="./static/images/why_choose_us.jpeg" alt="Company Logo" class="logo">
-                </div>
-                <div class="reasons">
-                    <div class="reason">
-                        <img src="./static/images/verify.png" alt="Verification & Assessment">
-                        <h3>ভেরিফিকেশন এবং মূল্যায়ন</h3>
-                        <p>আমরা আমাদের কর্মীদের সর্বোচ্চ গুণগত মান নিশ্চিত করতে কৃত্রিম বুদ্ধিমত্তা ব্যবহার করি এবং
-                            আমাদের কঠোর শারীরিক ও টেলিফোনিক ভেরিফিকেশন প্রক্রিয়া উন্নত করি।</p>
-                    </div>
-                    <div class="reason">
-                        <img src="./static/images/transpart_pricing.png" alt="Transparent Pricing">
-                        <h3>স্বচ্ছ মূল্য নির্ধারণ</h3>
-                        <p>আপনি যা পরিশোধ করবেন, তাই আপনি পাবেন। অতিরিক্তভাবে, আপনি পাবেন একটি প্রতিস্থাপন গ্যারান্টি,
-                            কোভিড-১৯ টেস্ট রিপোর্ট, ভেরিফিকেশন ডকুমেন্টস এবং আরও অনেক কিছু!</p>
-                    </div>
-                    <div class="reason">
-                        <img src="./static/images/Customer_support.png" alt="Customer Support">
-                        <h3>গ্রাহক সহায়তা</h3>
-                        <p>আমাদের এক্সিকিউটিভরা সর্বদা আপনার সমস্যা শুনতে এবং সমাধান করতে প্রস্তুত থাকবে।</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Highlights -->
-        <section>
-            <div class="carousel-container">
-                <h2 class="carousel-heading">হাইলাইটস @এক্সিকিউটিভ মেইডস</h2>
-                <div class="carousel">
-                    <img src="{{ url_for('static', filename='images/H_1.jpeg') }}" alt="Image 1">
-                    <img src="{{ url_for('static', filename='images/H_2.jpeg') }}" alt="Image 2">
-                    <img src="{{ url_for('static', filename='images/H_3.jpeg') }}" alt="Image 3">
-                    <img src="{{ url_for('static', filename='images/H_4.jpeg') }}" alt="Image 4">
-                    <img src="{{ url_for('static', filename='images/H_5.jpeg') }}" alt="Image 5">
-                    <img src="{{ url_for('static', filename='images/H_6.jpeg') }}" alt="Image 6">
-                    <img src="{{ url_for('static', filename='images/H_7.jpeg') }}" alt="Image 7">
-                    <img src="{{ url_for('static', filename='images/H_8.jpeg') }}" alt="Image 8">
-                </div>
-            </div>
-        </section>
+        
+        <!-- Swiper JS -->
+        <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
 
         <!-- Map Embed Section -->
         <div class="map-container mt-4">
@@ -859,43 +392,52 @@
 
         <!-- Footer Section -->
         <br><br> <br> <br> <br> <br>
-        <footer>
-            <span>
-                <div class="footer-content">
-                    <div class="contact">
-                        <h3>যোগাযোগ করুন</h3>
-                        <ul>
-                            <li><i class="bi bi-envelope"></i> ইমেল: contact@maidservice.com</li>
-                            <li><i class="bi bi-phone"></i> ফোন: +123 456 7890</li>
-                            <li><i class="bi bi-geo-alt"></i> ঠিকানা: ভাগলপুর বিহার</li>
-                        </ul>
-                    </div>
-                    <div class="links">
-                        <h3>ত্বরিত লিঙ্ক</h3>
-                        <ul>
-                            <li><a href="about_us.html">আমাদের সম্পর্কে</a></li>
-                            <li><a href="contact.html">যোগাযোগ করুন</a></li>
-                            <li><a href="privacyPolicy.html">গোপনীয়তা নীতি</a></li>
-                            <li><a href="TermsOfServices.html">সেবা শর্তাবলী</a></li>
-                            <li><a href="tearmsAndConditionCustomer.html">গ্রাহকের জন্য শর্তাবলী</a></li>
-                            <li><a href="tearmsAndConditionMaid.html">মেইডের জন্য শর্তাবলী</a></li>
-                            <li><a href="services.html">আমাদের সেবা</a></li>
-                        </ul>
-                    </div>
-                    <div class="social-media">
-                        <h3>আমাদের অনুসরণ করুন</h3>
-                        <ul>
-                            <li><a href="https://facebook.com" target="_blank"><i class="bi bi-facebook"></i> ফেসবুক</a>
-                            </li>
-                            <li><a href="https://twitter.com" target="_blank"><i class="bi bi-twitter"></i> টুইটার</a>
-                            </li>
-                            <li><a href="https://instagram.com" target="_blank"><i class="bi bi-instagram"></i>
-                                    ইনস্টাগ্রাম</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </span>
-        </footer>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+        <!-- ফুটার বিভাগ -->
+<section class="footer">
+    <div class="box-container">
+
+        <div class="box">
+            <h3>যোগাযোগ করুন</h3>
+            <p><i class="fas fa-phone-alt"></i> +1 9087267762</p>
+            <p><i class="fas fa-envelope"></i> Maidese@agency.com</p>
+            <p><i class="fas fa-home"></i> ঠিকানা: হরি নগর, হাজিপুর, বিহার</p>
+        </div>
+
+        <div class="box">
+            <h3>শাখা অবস্থান</h3>
+            <a href="#"><i class="fas fa-map-marker-alt"></i> জলন্ধর</a>
+            <a href="#"><i class="fas fa-map-marker-alt"></i> লখনউ</a>
+            <a href="#"><i class="fas fa-map-marker-alt"></i> বোম্বে</a>
+            <a href="#"><i class="fas fa-map-marker-alt"></i> নাগপুর</a>
+            <a href="#"><i class="fas fa-map-marker-alt"></i> দিল্লি</a>
+        </div>
+
+        <div class="box">
+            <h3>দ্রুত লিঙ্ক</h3>
+            <a href="about_us.html">আমাদের সম্পর্কে</a>
+            <a href="contact.html">যোগাযোগ করুন</a>
+            <a href="privacyPolicy.html">গোপনীয়তা নীতি</a>
+            <a href="TermsOfServices.html">পরিষেবার শর্তাবলী</a>
+            <a href="tearmsAndConditionCustomer.html">গ্রাহকের জন্য শর্তাবলী</a>
+            <a href="tearmsAndConditionMaid.html">গৃহকর্মীর জন্য শর্তাবলী</a>
+            <a href="services.html">আমাদের পরিষেবা</a>
+        </div>
+
+        <div class="box">
+            <h3>আমাদের অনুসরণ করুন</h3>
+            <a href="#"><i class="fab fa-facebook-square"></i> ফেসবুক</a>
+            <a href="#"><i class="fab fa-instagram"></i> ইনস্টাগ্রাম</a>
+            <a href="#"><i class="fab fa-twitter"></i> টুইটার</a>
+            <a href="#"><i class="fab fa-linkedin"></i> লিঙ্কডইন</a>
+            <a href="#"><i class="fab fa-github"></i> গিটহাব</a>
+        </div>
+
+    </div>
+
+    <h1 class="credit"> Created by <span>Team MAIDEASE</span> | &copy; All rights reserved! </h1>
+</section>
+
         <button id="scrollToTopBtn" style="display: none; position:right;  bottom: 100px; right: 30px; z-index: 100;  border: none; border-radius: 100px; padding: 10px 10px; cursor: pointer;">
             <img src="static\images\up-arrow.png" alt="Top" style="width: 25px; height: 25px; vertical-align: middle;">
         </button>

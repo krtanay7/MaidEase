@@ -295,6 +295,71 @@
   </div>
 
   <script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const modal = document.getElementById('notificationPopup');
+    const openBtn = document.getElementById('notificationButton');
+    const closeBtn = document.getElementById('closePopup');
+    const notificationList = document.querySelector('.notification-list');
+
+    // Fetch Notifications from Backend
+    function fetchNotifications() {
+        fetch('/maid/get_notifications')
+            .then(response => response.json())
+            .then(notifications => {
+                notificationList.innerHTML = ""; // Clear previous notifications
+
+                if (notifications.length === 0) {
+                    notificationList.innerHTML = "<p>No new notifications.</p>";
+                } else {
+                    notifications.forEach(notification => {
+                        const item = document.createElement('div');
+                        item.classList.add('notification-item');
+                        item.innerHTML = `<p><strong>${notification.message}</strong><br>
+                                          <small style="color: gray;">${new Date(notification.timestamp).toLocaleString()}</small></p>`;
+                        notificationList.appendChild(item);
+                    });
+                }
+            })
+            .catch(error => console.error('Error fetching notifications:', error));
+    }
+
+    // Poll for new notifications every 5 seconds
+    setInterval(fetchNotifications, 5000);
+
+    // Load notifications when clicking the notification button
+    openBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        fetchNotifications(); // Ensure messages are fetched before opening
+        modal.style.display = 'block';
+    });
+
+    // Close button for notification popup
+    closeBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        modal.style.display = 'none';
+    });
+
+    // Close when clicking outside the popup
+    document.addEventListener('click', function (e) {
+        if (modal.style.display === 'block' && !modal.contains(e.target) && e.target !== openBtn) {
+            modal.style.display = 'none';
+        }
+    });
+
+    // Close popup with ESC key
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && modal.style.display === 'block') {
+            modal.style.display = 'none';
+        }
+    });
+
+    // Fetch notifications immediately on page load
+    fetchNotifications();
+});
+
+  </script>
+<!-- 
+  <script>
 // script for popup notification box 
 document.addEventListener('DOMContentLoaded', () => {
   // DOM elements
@@ -303,19 +368,30 @@ document.addEventListener('DOMContentLoaded', () => {
   const closeBtn = document.getElementById('closePopup');
   const notificationList = document.querySelector('.notification-list');
 
-  // Example  notifications for test purpose 
-  const mockNotifications = [
-    { message: "Your maid booking has been confirmed!", time: "2 mins ago" },
-    { message: "Maid Ayesha is on the way to your location.", time: "30 mins ago" },
-    { message: "Payment received for your last service.", time: "10 mins ago" },
-    { message: "Booking request from Manshi mam .", time: "1 hour ago" },
-    { message: "Reminder: Your maid is scheduled for tomorrow at 10 AM.", time: "5 hours ago" },
-    { message: "Booking canceled by user Ritesh Raand .", time: "8 hours ago" },
-    { message: "A new maid has been registered in your area.", time: "1 day ago" },
-    { message: "Your service review has been submitted successfully.", time: "2 days ago" },
-    { message: "System maintenance scheduled for next Sunday.", time: "3 days ago" },
-    { message: "Your refund has been processed successfully.", time: "4 days ago" }
-  ];
+  
+document.addEventListener('DOMContentLoaded', function () {
+    function fetchNotifications() {
+        fetch('/maid/get_notifications')
+            .then(response => response.json())
+            .then(notifications => {
+                const notificationList = document.querySelector('.notification-list');
+                notificationList.innerHTML = "";
+                
+                notifications.forEach(notification => {
+                    const item = document.createElement('div');
+                    item.classList.add('notification-item');
+                    item.innerHTML = `<p><strong>${notification.message}</strong><br>
+                                      <small style="color: gray;">${new Date(notification.timestamp).toLocaleString()}</small></p>`;
+                    notificationList.appendChild(item);
+                });
+            })
+            .catch(error => console.error('Error fetching notifications:', error));
+    }
+
+    // Fetch notifications every 5 seconds
+    setInterval(fetchNotifications, 5000);
+});
+
 
   // Function to load mock notifications
   function loadNotifications() {
@@ -363,7 +439,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-  </script>
+  </script> -->
 
   </div>
 

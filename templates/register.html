@@ -9,124 +9,121 @@
     <link href="static/css/chatbot.css" rel="stylesheet">
 
     <style>
-        body {
-            background: url("{{ url_for('static', filename='images/bg.jpg') }}") no-repeat center center fixed;
-            background-size: cover;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Arial', sans-serif;
-            overflow-x: hidden; /* Prevent horizontal scroll */
-        }
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Roboto:wght@300;400;500&display=swap');
 
-        .card {
-            max-width: 500px;
-            width: 100%;
-            border-radius: 12px;
-            padding: 30px;
-            background-color: rgba(255, 255, 255, 0.9);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease-in-out;
-            overflow-y: auto; /* Allows scrolling inside the card */
-            max-height: 90vh; /* Restricts card height */
-        }
+/* Background Styling */
+body {
+    background: url("{{ url_for('static', filename='images/bg.jpg') }}") no-repeat center center fixed;
+    background-size: cover;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Roboto:wght@300;400;500&display=swap');
+    font-family: 'Roboto', sans-serif; /* Sans-serif only */
+    overflow-x: hidden;
+}
 
-        .card:hover {
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
-            transform: translateY(-5px);
-        }
+/* Card Styling */
+.card {
+    max-width: 500px;
+    width: 100%;
+    border-radius: 12px;
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.92); /* Slight transparency */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow-y: auto;
+    max-height: 90vh;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
 
-        h2 {
-            font-size: 28px;
-            color: #333;
-            margin-bottom: 30px;
-            text-align: center;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Add text shadow */
-        }
+.card:hover {
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
+    transform: translateY(-4px) scale(1.02);
+}
 
-        .btn-primary {
-            background-color: #007bff;
-            border: none;
-            border-radius: 5px;
-            padding: 12px;
-            font-size: 16px;
-            width: 100%;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-        }
+/* Heading Styling */
+h1 {
+    font-family: 'Poppins', sans-serif; /* Clean sans-serif font */
+    font-size: 40px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 25px;
+    text-align: center;
+}
+.mb-3{
+    font-family: 'Poppins', sans-serif;
+    font-size: 20px; 
+}
 
-        .btn-primary:hover {
-            background-color: #0056b3;
-            transform: translateY(-2px);
-        }
+/* Primary Button */
+.btn-primary {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 16px;
+    width: 100%;
+    color: white;
+    font-weight: bold;
+    font-family: 'Poppins', sans-serif;
+    transition: background 0.3s ease, transform 0.3s ease;
+    margin-top: 10px;
+}
 
-        .btn-link {
-            font-size: 16px;
-            color: #007bff;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
+.btn-primary:hover {
+    background: linear-gradient(135deg, #0056b3, #004494);
+    transform: translateY(-2px) scale(1.05);
+}
 
-        .btn-link:hover {
-            color: #0056b3;
-        }
+/* Link Button */
+.btn-link {
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    color: #007bff;
+    text-decoration: none;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
 
-        .mb-3 {
-            margin-bottom: 20px;
-        }
+.btn-link:hover {
+    color: #0056b3;
+    transform: scale(1.1);
+}
 
-        /* Gradient Overlay */
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.4); /* Dark transparent overlay */
-            z-index: -1;
-        }
+/* Spacing between login text & buttons */
+p {
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    font-size: 16px;
+    margin-top: 25px;
+    margin-bottom: 10px;
+}
 
-        /* Scroll to Top Button */
-        #scroll-to-top {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            font-size: 24px;
-            display: none; /* Hidden by default */
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        }
+/* Responsive Design */
+@media (max-width: 768px) {
+    .card {
+        padding: 20px;
+    }
 
-        #scroll-to-top:hover {
-            background-color: #0056b3;
-        }
+    h2 {
+        font-size: 24px;
+    }
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .card {
-                padding: 20px;
-            }
+    .btn-primary {
+        font-size: 15px;
+        padding: 10px;
+    }
+}
 
-            h2 {
-                font-size: 24px;
-            }
-        }
+
 
     </style>
 </head>
 <body>
     <div class="container d-flex justify-content-center align-items-center min-vh-100">
         <div class="card p-4 shadow-lg">
-            <h2>Register</h2>
+            <h1>Register</h1>
             <p class="mb-3 text-center">Please select how you'd like to register:</p>
 
             <div class="text-center">
@@ -137,7 +134,7 @@
                 <a href="{{ url_for('register_maid') }}" class="btn btn-primary">Register as Maid</a>
             </div>
 
-            <p class="mt-3 text-center">Already have an account? <a href="/login" class="btn-link">Login</a></p>
+            <p>Already have an account? <a href="index.html" class="btn-link" data-toggle="login-popup">Login</a></p>
         </div>
     </div>
 
@@ -161,8 +158,7 @@
             style="width: 100%; border-radius: 8px; margin-top: 5px;">Send</button>
     </div>
 
-    <!-- Scroll to Top Button -->
-    <button id="scroll-to-top">&#8593;</button>
+
 
     <script src="static/js/script.js"></script>
     <script src="static/js/chatbot.js"></script>
@@ -170,21 +166,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     
-    <script>
-        // Show Scroll to Top Button
-        window.onscroll = function() {
-            let scrollButton = document.getElementById('scroll-to-top');
-            if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
-                scrollButton.style.display = "block";
-            } else {
-                scrollButton.style.display = "none";
-            }
-        };
 
-        // Scroll to Top Function
-        document.getElementById('scroll-to-top').addEventListener('click', function() {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-    </script>
 </body>
 </html>

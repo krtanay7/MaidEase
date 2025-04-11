@@ -1,5 +1,21 @@
+/* Gradient Overlay */
+/* Gradient Overlay - Fixed */
+/* ritesh bhai wo black translucent background ko dekh lena apne se   */
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    /* Dark transparent overlay */
+    z-index: -1;
+}
+
 body {
-    background-image: url("{{ url_for('static', filename='images/bg.jpg') }}");
+    background-image: url("/static/images/bg.jpg");
     background-size: cover;
     background-position: center;
     color: #0c31d6;
@@ -28,6 +44,16 @@ header nav a:hover {
     transform: scale(1.1);
     background-color: #007bff;
 }
+
+.tagline,
+#tag2 {
+    color: #ffffff; /* Soft Warm Gold - Luxurious and professional */
+    text-shadow: #000000;
+
+}
+
+
+
 
 .btn {
     padding: 12px 25px;
@@ -257,17 +283,20 @@ section h2 {
     background-color: #f8f9fa;
 }
 
+/* Heading Styling */
 .heading {
     display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 40px;
+    flex-wrap: wrap; /* Ensures responsiveness */
 }
 
 .heading h1 {
     font-size: 36px;
     font-weight: bold;
     margin-right: 20px;
+    text-align: center;
 }
 
 .logo {
@@ -275,39 +304,93 @@ section h2 {
     height: auto;
 }
 
+/* 🔥 FIX: Removed conflicting flex styles & ensured grid works */
 .reasons {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
+    display: grid; /* Enforces grid layout */
+    grid-template-columns: repeat(4, 1fr); /* 4 columns */
+    gap: 20px; /* Space between items */
+    justify-content: center;
+    align-items: stretch; /* Ensures equal height */
+    padding: 20px 0;
 }
 
+/* Individual Reason Box */
 .reason {
-    margin: 10px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 12px;
     padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 300px;
     text-align: center;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+/* Hover Effects */
+.reason:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Reason Images */
 .reason img {
-    max-width: 100px;
+    max-width: 80px;
     height: auto;
     margin-bottom: 15px;
 }
 
+/* Reason Title */
 .reason h3 {
-    font-size: 24px;
+    font-size: 22px;
     font-weight: bold;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
+/* Reason Description */
 .reason p {
-    font-size: 16px;
+    font-size: 14px;
     color: #555;
+    line-height: 1.5;
 }
 
+/* ✅ RESPONSIVE DESIGN FIXES */
+
+/* 🔹 For Tablets (2 Reasons Per Row) */
+@media (max-width: 1024px) {
+    .reasons {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns */
+    }
+}
+
+/* 🔹 For Mobile Devices (1 Reason Per Row) */
+@media (max-width: 768px) {
+    .reasons {
+        grid-template-columns: 1fr; /* 1 column */
+    }
+
+    .heading {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .heading h1 {
+        font-size: 28px;
+        margin-right: 0;
+    }
+
+    .reason {
+        padding: 15px;
+    }
+
+    .reason h3 {
+        font-size: 20px;
+    }
+
+    .reason p {
+        font-size: 13px;
+    }
+}
+
+
+/* maps area  */
 .map-container {
     overflow: hidden; /* Prevents scrollbars */
     border-radius: 10px; /* Optional: Rounds corners */
@@ -320,6 +403,98 @@ section h2 {
 .map-container iframe:hover {
     transform: scale(1.05); /* Slightly enlarges the map */
 }
+
+/* Services Section */
+.services {
+    text-align: center;
+    padding: 60px 10%;
+    background: transparent; /* Transparent background only for the section */
+}
+
+/* Heading */
+.services .heading {
+    font-size: 2.7rem;
+    font-weight: bold;
+    color: #fff; /* White text for contrast */
+    text-transform: uppercase;
+    margin-bottom: 25px;
+}
+
+/* Box Container */
+.box-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Larger cards */
+    gap: 25px;
+    justify-content: center;
+    padding: 25px;
+}
+
+/* Individual Service Box */
+.box1 {
+    background: rgba(255, 255, 255, 0.9); /* Solid white background for better readability */
+    border-radius: 12px; /* Smooth corners */
+    padding: 25px;
+    text-align: center;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover Effects */
+.box1:hover {
+    transform: translateY(-6px);
+    box-shadow: 0px 10px 22px rgba(0, 0, 0, 0.4);
+}
+
+/* Icons */
+.box1 i {
+    font-size: 2.8rem;
+    color:#006eff; /* Bright gold color */
+    margin-bottom: 12px;
+}
+
+/* Service Title */
+.box1 h3 {
+    font-size: 1.5rem;
+    color: #333; /* Darker text for better contrast */
+    margin-bottom: 12px;
+}
+
+/* Service Description */
+.box1 p {
+    font-size: 1.1rem;
+    color: #555; /* Dark gray for readability */
+    line-height: 1.6;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .services {
+        padding: 40px 5%;
+    }
+
+    .box-container {
+        grid-template-columns: 1fr;
+    }
+
+    .box1 {
+        max-width: 100%;
+        padding: 20px;
+    }
+
+    .box1 i {
+        font-size: 2.5rem;
+    }
+
+    .box1 h3 {
+        font-size: 1.3rem;
+    }
+
+    .box1 p {
+        font-size: 1rem;
+    }
+}
+
+      
 
 
 /* CSS Highlights */
@@ -388,19 +563,63 @@ section h2 {
     /* Optional: Limit the maximum width for larger screens */
 }
 
+/* Reasons Section */
 
-/* Gradient Overlay */
-body::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.4);
-    /* Dark transparent overlay */
-    z-index: -1;
+
+/* Hover Effect on Reason Box */
+.reason:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
 }
+
+/* Image Styling */
+.reason img {
+    width: 80px;
+    height: 80px;
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+/* Hover Effect on Image */
+.reason:hover img {
+    transform: scale(1.1);
+    filter: brightness(1.2);
+}
+
+/* Heading Styling */
+.reason h3 {
+    font-size: 1.3rem;
+    margin-top: 10px;
+    color: #333;
+    transition: color 0.3s ease;
+}
+
+/* Hover Effect on Heading */
+.reason:hover h3 {
+    color: #ff5733;
+}
+
+/* Paragraph Styling */
+.reason p {
+    font-size: 0.95rem;
+    color: #555;
+    margin-top: 10px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .reasons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .reason {
+        width: 90%;
+        max-width: 320px;
+    }
+}
+
+
+
 
 /* done by tanay */
 
@@ -490,6 +709,11 @@ body::before {
 .footer .box a i,
 .footer .box p i {
     margin-right: 8px; /* Space between icon and text */
+}
+.footer i {
+    font-size: 1.7rem;
+    color:#007bff;
+    margin-bottom: 10px;
 }
 
 /* Hover Effect for Links */
@@ -754,69 +978,3 @@ body {
 }
 
       
-        <section>
-            <div class="carousel-container">
-                <h2 class="carousel-heading">હાઇલાઇટ્સ @Executive Maids</h2>
-                <div class="carousel">
-                    <img src="{{ url_for('static', filename='images/H_1.jpeg') }}" alt="Image 1">
-                    <img src="{{ url_for('static', filename='images/H_2.jpeg') }}" alt="Image 2">
-                    <img src="{{ url_for('static', filename='images/H_3.jpeg') }}" alt="Image 3">
-                    <img src="{{ url_for('static', filename='images/H_4.jpeg') }}" alt="Image 4">
-                    <img src="{{ url_for('static', filename='images/H_5.jpeg') }}" alt="Image 5">
-                    <img src="{{ url_for('static', filename='images/H_6.jpeg') }}" alt="Image 6">
-                    <img src="{{ url_for('static', filename='images/H_7.jpeg') }}" alt="Image 7">
-                    <img src="{{ url_for('static', filename='images/H_8.jpeg') }}" alt="Image 8">
-                </div>
-            </div>
-        </section>
-
-
-        .reasons {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-    padding: 20px;
-}
-
-/* Individual Reason Box */
-.reason {
-    background: white;
-    border-radius: 10px;
-    text-align: center;
-    padding: 20px;
-    width: 300px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-
-
- const responses = { en: {
-            "hi": "Hello! How can I assist you today?",
-            "hello": "Hello! How can I assist you today?",
-            "services": "We offer cleaning, cooking, childcare, and elder care services.",
-            "price": "Please contact us for pricing details.",
-            "maid registration": "To register as a maid, click on the 'Register as maid' button on the homepage.",
-            "customer registration": "To register as a customer, click on the 'Register as customer' button on the homepage.",
-            "contact": "You can reach us at contact@maidservice.com or call +123 456 7890.",
-            "default": "I'm sorry, I didn't understand that. Can you rephrase?",
-        },
-        hn: { // Hindi Responses
-            "hi": "नमस्ते! मैं आपकी कैसे सहायता कर सकता हूँ?",
-            "hello": "नमस्ते! मैं आपकी कैसे सहायता कर सकता हूँ?",
-            "services": "हम सफाई, खाना बनाना, बच्चों की देखभाल, और बुजुर्ग देखभाल सेवाएं प्रदान करते हैं।",
-            "price": "कृपया मूल्य निर्धारण के लिए हमसे संपर्क करें।",
-            "maid registration": "नौकरानी के रूप में पंजीकरण करने के लिए, 'नौकरानी के रूप में पंजीकरण करें' बटन पर क्लिक करें।",
-            "contact": "आप हमसे contact@maidservice.com पर संपर्क कर सकते हैं या +123 456 7890 पर कॉल कर सकते हैं।",
-            "default": "मुझे खेद है, मैं इसे समझ नहीं पाया। क्या आप फिर से कह सकते हैं?",
-        },
-        gj: { // Gujarati Responses
-            "hi": "નમસ્તે! હું તમને કેવી રીતે સહાય કરી શકું?",
-            "hello": "નમસ્તે! હું તમને કેવી રીતે સહાય કરી શકું?",
-            "services": "અમે સાફસફાઈ, રસોઈ, બાળસંભાળ અને વૃદ્ધોની સંભાળ સેવાઓ પ્રદાન કરીએ છીએ.",
-            "price": "મુલ્ય માહિતી માટે કૃપા કરીને અમારો સંપર્ક કરો.",
-            "maid registration": "નોકર તરીકે નોંધણી કરવા માટે, 'નોકર તરીકે નોંધણી કરો' બટન પર ક્લિક કરો.",
-            "contact": "તમે અમારો સંપર્ક contact@maidservice.com પર કરી શકો છો અથવા +123 456 7890 પર કૉલ કરી શકો છો.",
-            "default": "માફ કરશો, હું સમજી શક્યો નથી. કૃપા કરીને ફરી કહો?",
-        } };

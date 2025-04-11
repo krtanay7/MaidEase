@@ -631,99 +631,246 @@ body {
 </button> -->
 
 <button id="notificationButton" class="btn btn-warning">
-  <i class="fa-solid fa-bell fa-shake fa-2xl" style="color: #1d25bf;"></i>
+  <i class="fa-solid fa-bell fa-2xl" style="color: #1d25bf;"></i>
+  <span id="notificationCount" class="badge bg-danger">0</span>
 </button>
-
-<!-- Notification Popup -->
+<!-- Notification Popup Structure -->
 
 <div id="notificationPopup" class="notification-popup">
   <div class="notification-popup-content">
     <span id="closePopup2" class="notification-close-button">&times;</span>
-    <div id="notificationContent">
-      <h3 style="color: #0eb427; margin-top: 0;">Notifications</h3>
-      <h4>Hello, {{ session['user_name'] }}</h4>
-      <div class="notification-list">
-        <!-- Notification items will go here -->
-      </div>
-    </div>
+    <h3 style="color: #0eb427;">Notifications</h3>
+    <div class="notification-list"></div>
   </div>
 </div>
 
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-  // DOM elements
-  const modal = document.getElementById('notificationPopup');
-  const openBtn = document.getElementById('notificationButton');
-  const closeBtn = document.getElementById('closePopup2');
-  const notificationList = document.querySelector('.notification-list');
+    const notificationBtn = document.getElementById('notificationButton');
+    const notificationPopup = document.getElementById('notificationPopup');
+    const closeBtn = document.getElementById('closePopup2');
+    const notificationList = document.querySelector('.notification-list');
+    let isPopupOpen = false;
+    let pollInterval; // Store polling interval
 
-  // Initialize WebSocket connection to Flask-SocketIO
-  const socket = io("http://localhost:5000");  // Adjust the URL if running on a different host
+    // Toggle notification popup
+    notificationBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        
+        if (isPopupOpen) {
+            // If already open, close it
+            notificationPopup.style.display = 'none';
+            isPopupOpen = false;
+            stopPolling();
+        } else {
+            // Open the popup, fetch notifications & start polling
+            notificationPopup.style.display = 'block';
+            isPopupOpen = true;
+            loadNotifications();
+            startPolling();
+        }
+    });
 
-  // Function to add new notifications dynamically
-  function addNotification(message) {
-    const notificationItem = document.createElement('div');
-    notificationItem.classList.add('notification-item');
-    const timestamp = new Date().toLocaleTimeString(); // Current time
-    notificationItem.innerHTML = `<p><strong>${message}</strong> <br> <small style="color: gray;">${timestamp}</small></p>`;
-    notificationList.prepend(notificationItem); // Add new notifications at the top
-  }
+    // Close popup
+    closeBtn.addEventListener('click', () => {
+        notificationPopup.style.display = 'none';
+        isPopupOpen = false;
+        stopPolling();
+    });
 
-  function fetchNotifications() {
-    fetch('/get_notifications')  // Replace with your API endpoint
-        .then(response => response.json())
-        .then(data => {
-            const notificationList = document.querySelector('.notification-list');
-            notificationList.innerHTML = ""; // Clear old notifications
-            data.notifications.forEach(notification => {
-                const notificationItem = document.createElement('div');
-                notificationItem.classList.add('notification-item');
-                notificationItem.innerHTML = `<p><strong>${notification.message}</strong> <br> <small>${notification.time}</small></p>`;
-                notificationList.appendChild(notificationItem);
+    // Close when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!notificationPopup.contains(e.target) && !notificationBtn.contains(e.target)) {
+            notificationPopup.style.display = 'none';
+            isPopupOpen = false;
+            stopPolling();
+        }
+    });
+
+    // Fetch notifications (Ensure only one API call at a time)
+    async function loadNotifications() {
+        try {
+            const response = await fetch('/customer/messages');
+            const messages = await response.json();
+
+            notificationList.innerHTML = ""; // Clear previous notifications
+
+            if (messages.length === 0) {
+                notificationList.innerHTML = "<p>No new notifications.</p>";
+            } else {
+                messages.forEach(msg => {
+                    const item = document.createElement('div');
+                    item.classList.add('notification-item');
+                    item.innerHTML = `
+                        <p>${msg.content}</p>
+                        <small>${new Date(msg.timestamp).toLocaleString()}</small>
+                    `;
+                    notificationList.appendChild(item);
+                });
+            }
+        } catch (error) {
+            console.error('Error fetching notifications:', error);
+        }
+    }
+
+    // Update notification bell badge
+    async function updateBellBadge() {
+        try {
+            const response = await fetch('/customer/unread_count');
+            const data = await response.json();
+            const badge = document.createElement('span');
+            badge.className = 'notification-badge';
+            
+            if (data.count > 0) {
+                badge.textContent = data.count;
+                notificationBtn.appendChild(badge);
+            } else {
+                const existingBadge = notificationBtn.querySelector('.notification-badge');
+                if (existingBadge) existingBadge.remove();
+            }
+        } catch (error) {
+            console.error('Error updating badge:', error);
+        }
+    }
+
+    // Polling mechanism to fetch new notifications every 5 seconds
+    function startPolling() {
+        stopPolling(); // Clear existing interval before starting a new one
+        pollInterval = setInterval(() => {
+            if (isPopupOpen) {
+                loadNotifications();
+                updateBellBadge();
+            }
+        }, 5000);
+    }
+
+    function stopPolling() {
+        clearInterval(pollInterval);
+    }
+
+    // Mark notification as read
+    async function markAsRead(messageId) {
+        try {
+            const response = await fetch(`/customer/mark_read/${messageId}`, {
+                method: 'POST'
             });
-        })
-        .catch(error => console.error("Error fetching notifications:", error));
-}
-
-// Fetch notifications every 5 seconds
-setInterval(fetchNotifications, 5000);
-
-
-  // Listen for real-time notifications from Flask server
-  socket.on("notification", function (data) {
-    addNotification(data.message);
-  });
-
-  // Show modal when notification button is clicked
-  openBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    modal.style.display = 'block';
-  });
-  // Hide modal when close button is clicked
-  closeBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    modal.style.display = 'close';
-  })
-
-  
-
-  // Close modal when clicking outside of it
-  document.addEventListener('click', (e) => {
-    if (modal.style.display === 'block' && !modal.contains(e.target) && e.target !== openBtn) {
-      modal.style.display = 'none';
+            
+            if (response.ok) {
+                const item = document.querySelector(`[data-id="${messageId}"]`);
+                if (item) {
+                    item.classList.remove('unread');
+                    item.classList.add('read');
+                    item.querySelector('.mark-read-btn')?.remove();
+                }
+                updateBellBadge();
+            }
+        } catch (error) {
+            console.error('Error marking as read:', error);
+        }
     }
-  });
 
-  // Close modal with ESC key
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && modal.style.display === 'block') {
-      modal.style.display = 'none';
-    }
-  });
+    // Initial badge update
+    updateBellBadge();
 });
 
-</script>
+  </script>
+  
+  <style>
+  /* Notification Styles */
+  .notification-popup {
+      display: none;
+      position: fixed;
+      top: 70px;
+      right: 20px;
+      width: 350px;
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      z-index: 1000;
+  }
+  
+  .notification-popup-content {
+      position: relative;
+      padding: 20px;
+  }
+  
+  .notification-close-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 24px;
+      cursor: pointer;
+      color: #666;
+  }
+  
+  .notification-list {
+      max-height: 400px;
+      overflow-y: auto;
+  }
+  
+  .notification-item {
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.3s ease;
+  }
+  
+  .notification-item.unread {
+      background: #e3f2fd;
+      border-left: 4px solid #2196f3;
+  }
+  
+  .notification-item.read {
+      background: #f5f5f5;
+      opacity: 0.8;
+  }
+  
+  .notification-content p {
+      margin: 0;
+      color: #333;
+  }
+  
+  .notification-content small {
+      color: #666;
+      font-size: 0.8rem;
+  }
+  
+  .mark-read-btn {
+      background: none;
+      border: none;
+      color: #4CAF50;
+      cursor: pointer;
+      padding: 5px;
+  }
+  
+  .notification-badge {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: #ff4444;
+      color: white;
+      border-radius: 50%;
+      padding: 4px 8px;
+      font-size: 0.8rem;
+  }
+  
+  .fa-bell.fa-shake {
+      animation: fa-shake 2s ease-in-out infinite;
+  }
+  
+  @keyframes fa-shake {
+      0% { transform: rotate(0deg); }
+      25% { transform: rotate(15deg); }
+      50% { transform: rotate(0deg); }
+      75% { transform: rotate(-15deg); }
+      100% { transform: rotate(0deg); }
+  }
+  </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
 
 
